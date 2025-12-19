@@ -20,7 +20,6 @@ function App() {
     switch (activeTab) {
       case 'itinerary': return <ItineraryView />;
       case 'cost': return <CostView />;
-      // 加入 key={activeTab} 是關鍵，強迫 React 重新渲染組件並載入對應的資料
       case 'prep': return <ListsView key="prep" type="prep" />;
       case 'luggage': return <ListsView key="luggage" type="luggage" />;
       case 'shopping': return <ListsView key="shopping" type="shopping" />;
@@ -43,22 +42,23 @@ function App() {
       
       {/* Header */}
       <header className="z-40 bg-white pt-safe-top">
-        <div className="px-6 pt-6 pb-4 flex justify-between items-center">
+        <div className="px-5 pt-6 pb-4 flex justify-between items-start">
           <div>
-            <div className="flex items-center space-x-2 mb-1">
-                <span className="bg-tokyo-ink text-white text-[8px] font-bold px-1.5 py-0.5 tracking-widest uppercase font-mono">2026</span>
-                <span className="text-[8px] text-gray-600 font-bold tracking-[0.2em] uppercase font-serif">Tokyo Winter Trip</span>
+            <div className="flex items-center space-x-2 mb-1.5">
+                <span className="bg-tokyo-ink text-white text-[10px] font-bold px-1.5 py-0.5 tracking-widest uppercase font-mono">2026</span>
+                <span className="text-[10px] text-gray-500 font-bold tracking-[0.2em] uppercase font-serif">Tokyo Trip</span>
             </div>
-            <h1 className="text-xl font-serif font-bold text-tokyo-ink tracking-[0.1em] leading-none">
+            {/* 標題縮小 1 級 (2xl -> xl) */}
+            <h1 className="text-xl font-serif font-bold text-tokyo-ink tracking-[0.05em] leading-tight">
               東京冬之旅
             </h1>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 mt-1">
              {weather ? (
-                <div className="flex items-center space-x-1.5 text-tokyo-ink">
-                    <Icon name={getWeatherIcon(weather.code)} className="w-5 h-5" />
-                    <span className="text-sm font-bold font-mono">{weather.temperature}°C</span>
+                <div className="flex items-center space-x-1 text-tokyo-ink bg-gray-50 px-2 py-1 rect-ui border border-gray-100">
+                    <Icon name={getWeatherIcon(weather.code)} className="w-4 h-4 text-tokyo-gold" />
+                    <span className="text-sm font-bold font-mono">{weather.temperature}°</span>
                 </div>
              ) : (
                 <div className="w-8 h-4 bg-gray-50 animate-pulse"></div>
@@ -67,22 +67,22 @@ function App() {
         </div>
 
         {/* Tab Navigation */}
-        <nav className="flex w-full border-b border-gray-100 overflow-x-auto no-scrollbar bg-white">
+        <nav className="grid grid-cols-6 w-full border-b border-gray-100 bg-white">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 min-w-[60px] flex flex-col items-center justify-center py-3 transition-all relative ${
-                  isActive ? 'text-tokyo-ink' : 'text-gray-600 hover:text-tokyo-ink'
+                className={`flex flex-col items-center justify-center py-3.5 transition-all relative ${
+                  isActive ? 'text-tokyo-ink bg-gray-50/50' : 'text-gray-400'
                 }`}
               >
-                <span className={`text-xs font-bold font-serif tracking-widest ${isActive ? 'scale-110' : ''}`}>
+                <span className={`text-[13px] font-bold font-serif tracking-tight transition-transform ${isActive ? 'scale-105' : ''}`}>
                   {tab.label}
                 </span>
                 {isActive && (
-                    <div className="absolute bottom-0 left-1/4 right-1/4 h-[2px] bg-tokyo-ink"></div>
+                    <div className="absolute bottom-0 left-1 right-1 h-[2.5px] bg-tokyo-ink"></div>
                 )}
               </button>
             );
@@ -98,8 +98,8 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-50 py-2 px-6 flex justify-center items-center pointer-events-none">
-          <span className="text-[8px] font-mono text-gray-400 tracking-[0.5em] uppercase">Memories 2026</span>
+      <footer className="bg-white border-t border-gray-50 py-2.5 px-6 flex justify-center items-center pointer-events-none">
+          <span className="text-[9px] font-mono text-gray-400 tracking-[0.4em] uppercase">Memories 2026</span>
       </footer>
     </div>
   );

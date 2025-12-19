@@ -40,7 +40,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: 'HND 羽田機場 T3',
         location: { 
           description: '羽田機場第 3 航廈', 
-          address: '東京都大田区羽田空港２丁目６−５',
+          address: '東京都大田區羽田空港２丁目６−５',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=羽田空港第3ターミナル' 
         },
         notes: ['入境審查', '領取 Wifi/Sim 卡', '購買 Pasmo/Suica']
@@ -52,7 +52,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         icon: '⛩️',
         location: { 
           description: '台東區淺草 2-3-1', 
-          address: '東京都台東区浅草２丁目３−１',
+          address: '東京都台東區淺草２丁目３−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=淺草神社' 
         },
         notes: ['淺草寺旁的清幽神社，供奉三位對淺草寺有功的人。']
@@ -64,7 +64,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         icon: '⛩️',
         location: { 
           description: '台東區今戶 1-5-22', 
-          address: '東京都台東区今戸１丁目５−２２',
+          address: '東京都台東區今戶１丁目５−２２',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=今戶神社' 
         },
         notes: ['招財貓發源地，也是著名的求姻緣聖地。']
@@ -82,7 +82,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '回飯店 Check-in',
         location: { 
           description: '東京皇家王子大飯店花園塔', 
-          address: '東京都港区芝公園４丁目８−１',
+          address: '東京都港區芝公園４丁目８−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Prince+Park+Tower+Tokyo' 
         }
       },
@@ -92,7 +92,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '東京鐵塔 (Klook)',
         isHighlight: true,
         location: { 
-          address: '東京都港区芝公園４丁目２−８',
+          address: '東京都港區芝公園４丁目２−８',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=東京鐵塔' 
         },
         notes: ['✅ Klook 預約時間：20:45', '東京永恆的地標，冬季點燈非常浪漫。']
@@ -113,7 +113,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         isHighlight: true,
         location: { 
           description: '澀谷區代代木神園町 1-1', 
-          address: '東京都渋谷区代々木神園町１−１',
+          address: '東京都渋谷區代々木神園町１−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=明治神宮' 
         },
         notes: ['東京都心規模最大的綠地。', '清晨散步空氣極佳。']
@@ -124,7 +124,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '新宿逛街',
         location: { 
           description: '新宿站南口 NEWoMan', 
-          address: '東京都新宿区新宿４丁目１−６',
+          address: '東京都新宿區新宿４丁目１−６',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=NEWoMan+Shinjuku' 
         },
         notes: ['LUMINE 1/2 適合買衣服', 'NEWoMan 選物店多']
@@ -135,7 +135,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '池袋 Sunshine City',
         location: { 
           description: '豐島區東池袋 3-1-1', 
-          address: '東京都豊島区東池袋３丁目１−１',
+          address: '東京都豊島區東池袋３丁目１−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Sunshine+City' 
         },
         notes: ['Pokemon Center、Animate 旗艦店都在這。']
@@ -154,7 +154,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         time: '10:00', 
         title: '代代木公園', 
         location: { 
-          address: '東京都渋谷区代々木神園町２−１',
+          address: '東京都渋谷區代々木神園町２−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=代代木公園' 
         } 
       },
@@ -164,7 +164,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '東鄉神社', 
         icon: '⛩️', 
         location: { 
-          address: '東京都渋谷区神宮前１丁目５−３',
+          address: '東京都渋谷區神宮前１丁目５−３',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=東鄉神社' 
         } 
       },
@@ -174,7 +174,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '原宿 (niko and...)', 
         location: { 
           description: 'niko and... TOKYO',
-          address: '東京都渋谷区神宮前６丁目１２−２０',
+          address: '東京都渋谷區神宮前６丁目１２−２０',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=niko+and+TOKYO' 
         } 
       },
@@ -231,7 +231,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: 'TeamLab 豐洲', 
         isHighlight: true, 
         location: { 
-          address: '東京都江東区豊洲６丁目１−１６',
+          address: '東京都江東區豐洲６丁目１−１６',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=teamLab+Planets' 
         }, 
         notes: ['需赤腳進入，建議著膝蓋以上長褲。'] 
@@ -242,7 +242,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '日枝神社', 
         icon: '⛩️', 
         location: { 
-          address: '東京都千代田区永田町２丁目１０−５',
+          address: '東京都千代田區永田町２丁目１０−５',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=日枝神社' 
         }, 
         notes: ['藏身於赤坂商業區的神社，有美麗的鳥居。'] 
@@ -253,7 +253,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '赤坂冰川神社', 
         icon: '⛩️', 
         location: { 
-          address: '東京都港区赤坂６丁目１０−１２',
+          address: '東京都港區赤坂６丁目１０−１２',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=赤坂冰川神社' 
         } 
       },
@@ -263,7 +263,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '六本木夜景', 
         isHighlight: true, 
         location: { 
-          address: '東京都港区六本木６丁目１０−１',
+          address: '東京都港區六本木６丁目１０−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=六本木ヒルズ展望台' 
         }, 
         notes: ['森大樓 52 樓展望台。'] 
@@ -280,7 +280,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         time: '08:30', 
         title: '築地市場', 
         location: { 
-          address: '東京都中央区築地４丁目１６−２',
+          address: '東京都中央區築地４丁目１６−２',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=築地市場' 
         }, 
         notes: ['雖然場內搬遷，場外市場依舊美食雲集。'] 
@@ -291,7 +291,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: '東京大神宮', 
         icon: '⛩️', 
         location: { 
-          address: '東京都千代田区富士見２丁目４−１',
+          address: '東京都千代田區富士見２丁目４−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=東京大神宮' 
         }, 
         notes: ['東京著名的結緣之神。'] 
@@ -301,7 +301,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         time: '12:00', 
         title: '東京車站', 
         location: { 
-          address: '東京都千代田区丸の内１丁目９−１',
+          address: '東京都千代田區丸の内１丁目９−１',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=東京駅' 
         }, 
         notes: ['站內一番街非常大，可一次買齊伴手禮。'] 
@@ -313,7 +313,7 @@ export const ITINERARY_DATA: DailyItinerary[] = [
         title: 'HND 羽田機場 T3', 
         transport: { type: 'flight', detail: '日本航空 JL099 | 經濟艙 | 波音 787-800' },
         location: { 
-          address: '東京都大田区羽田空港２丁目６−５',
+          address: '東京都大田區羽田空港２丁目６−５',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=羽田空港第3ターミナル' 
         },
         notes: [
@@ -335,14 +335,43 @@ export const ITINERARY_DATA: DailyItinerary[] = [
 ];
 
 export const INITIAL_PACKING_LIST: LuggageItem[] = [
-  { id: 'c-1', name: '護照', category: 'carry-on', completed: false },
-  { id: 'c-2', name: '台灣駕照', category: 'carry-on', completed: false },
-  { id: 'c-3', name: '駕照譯本', category: 'carry-on', completed: false },
-  { id: 'c-4', name: '錢包 (日幣 & 信用卡)', category: 'carry-on', completed: false },
-  { id: 'c-6', name: '行動電源', category: 'carry-on', completed: false },
-  { id: 'ch-3', name: '換洗衣物', category: 'checked', completed: false },
+  // Carry-on 隨身行李
+  { id: 'co-1', name: '護照', category: 'carry-on', completed: false },
+  { id: 'co-2', name: '台灣駕照', category: 'carry-on', completed: false },
+  { id: 'co-3', name: '駕照譯本', category: 'carry-on', completed: false },
+  { id: 'co-4', name: '錢包（日幣&信用卡）', category: 'carry-on', completed: false },
+  { id: 'co-5', name: '耳機', category: 'carry-on', completed: false },
+  { id: 'co-6', name: '行動電源', category: 'carry-on', completed: false },
+  { id: 'co-7', name: '充電線', category: 'carry-on', completed: false },
+  { id: 'co-8', name: '充電頭', category: 'carry-on', completed: false },
+  { id: 'co-9', name: '保溫杯', category: 'carry-on', completed: false },
+  { id: 'co-10', name: '牙線棒', category: 'carry-on', completed: false },
+  { id: 'co-11', name: '護唇膏', category: 'carry-on', completed: false },
+  { id: 'co-12', name: '雨傘', category: 'carry-on', completed: false },
+  { id: 'co-13', name: '袖珍包面紙', category: 'carry-on', completed: false },
+  { id: 'co-14', name: '口罩', category: 'carry-on', completed: false },
+  { id: 'co-15', name: '眼藥水', category: 'carry-on', completed: false },
+  { id: 'co-16', name: '常備藥品', category: 'carry-on', completed: false },
+  { id: 'co-17', name: '手機掛繩', category: 'carry-on', completed: false },
+
+  // Checked 託運行李
+  { id: 'ch-1', name: '浴巾毛巾', category: 'checked', completed: false },
+  { id: 'ch-2', name: '錢包台幣', category: 'checked', completed: false },
+  { id: 'ch-3', name: '換洗衣物（衣褲鞋襪）', category: 'checked', completed: false },
   { id: 'ch-4', name: '保養品', category: 'checked', completed: false },
+  { id: 'ch-5', name: '化妝品', category: 'checked', completed: false },
+  { id: 'ch-6', name: '防曬', category: 'checked', completed: false },
+  // Fix syntax error: removed duplicated 'id:' property definition
+  { id: 'ch-7', name: '護髮', category: 'checked', completed: false },
+  { id: 'ch-8', name: '牙刷牙膏', category: 'checked', completed: false },
+  { id: 'ch-9', name: '折疊衣架', category: 'checked', completed: false },
+  { id: 'ch-10', name: '梳子', category: 'checked', completed: false },
   { id: 'ch-11', name: '睡衣', category: 'checked', completed: false },
+  { id: 'ch-12', name: '藥品（內外用、痠痛藥）', category: 'checked', completed: false },
+  { id: 'ch-13', name: '牙線棒', category: 'checked', completed: false },
+  { id: 'ch-14', name: '離子夾', category: 'checked', completed: false },
+  { id: 'ch-15', name: '行李袋', category: 'checked', completed: false },
+  { id: 'ch-16', name: '指甲剪', category: 'checked', completed: false },
 ];
 
 export const INITIAL_SHOPPING_LIST: ShoppingItem[] = [
