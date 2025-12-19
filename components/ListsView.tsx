@@ -5,19 +5,13 @@ import { Icon, Modal } from './Shared';
 
 type ListType = 'prep' | 'luggage' | 'shopping';
 
-export const ListsView = ({ type }: { type: ListType }) => {
+// Fix: Typed as React.FC to support standard React props such as 'key' in JSX, 
+// which is required in App.tsx to force remounting when switching between different list types.
+export const ListsView: React.FC<{ type: ListType }> = ({ type }) => {
   const getStorageKey = () => `tokyo_list_${type}`;
   
-  const [items, setItems] = useState<any[]>(() => {
-    const saved = localStorage.getItem(`tokyo_list_${type}`);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
-      } catch (e) {
-        console.error("Parse error", e);
-      }
-    }
+  // 取得預設值的輔助函式
+  const getDefaultItems = () => {
     if (type === 'luggage') return INITIAL_PACKING_LIST;
     if (type === 'shopping') return INITIAL_SHOPPING_LIST;
     return [
@@ -26,13 +20,26 @@ export const ListsView = ({ type }: { type: ListType }) => {
       {id: 'p-3', name: '日幣現金預兌換', completed: false, category: 'general'},
       {id: 'p-4', name: '網卡/漫遊數據設定', completed: false, category: 'general'},
     ];
+  };
+
+  const [items, setItems] = useState<any[]>(() => {
+    const saved = localStorage.getItem(getStorageKey());
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {
+        console.error("Parse error", e);
+      }
+    }
+    return getDefaultItems();
   });
 
-  // 修改預設值為 'carry-on'
   const [luggageTab, setLuggageTab] = useState<'carry-on'|'checked'>('carry-on');
   const [newItemName, setNewItemName] = useState('');
   const [editingItem, setEditingItem] = useState<any | null>(null);
   const [editName, setEditName] = useState('');
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(getStorageKey(), JSON.stringify(items));
@@ -62,6 +69,13 @@ export const ListsView = ({ type }: { type: ListType }) => {
     setItems(prev => prev.filter(i => i.id !== id));
   };
 
+  const handleReset = () => {
+    const defaults = getDefaultItems();
+    setItems(defaults);
+    localStorage.setItem(getStorageKey(), JSON.stringify(defaults));
+    setShowResetConfirm(false);
+  };
+
   const openEdit = (item: any) => {
     setEditingItem(item);
     setEditName(item.name);
@@ -86,7 +100,16 @@ export const ListsView = ({ type }: { type: ListType }) => {
       <div className="flex flex-col mb-5 border-b border-gray-100 pb-4 px-1">
           <span className="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-widest mb-1.5">{subTitleMap[type]}</span>
           <div className="flex items-center justify-between">
-            <h2 className="font-serif font-bold text-xl text-tokyo-ink tracking-wide">{titleMap[type]}</h2>
+            <div className="flex items-center space-x-3">
+                <h2 className="font-serif font-bold text-xl text-tokyo-ink tracking-wide">{titleMap[type]}</h2>
+                <button 
+                  onClick={() => setShowResetConfirm(true)}
+                  className="p-1.5 text-gray-300 hover:text-tokyo-gold transition-colors active:rotate-180 duration-500"
+                  title="重置為預設值"
+                >
+                  <Icon name="sync" className="w-4 h-4" />
+                </button>
+            </div>
             {type === 'luggage' && (
                 <div className="flex bg-gray-100 p-0.5 rect-ui shadow-inner border border-gray-200/50">
                     <button onClick={() => setLuggageTab('carry-on')} className={`px-3 py-1 text-[11px] font-bold transition-all ${luggageTab === 'carry-on' ? 'bg-white text-tokyo-ink shadow-sm' : 'text-gray-500'}`}>隨身</button>
@@ -127,7 +150,6 @@ export const ListsView = ({ type }: { type: ListType }) => {
                     <div className={`w-6 h-6 border-2 border-tokyo-ink mr-5 flex items-center justify-center transition-all rect-ui shrink-0 ${item.completed ? 'bg-tokyo-ink shadow-inner' : 'bg-white'}`}>
                         {item.completed && <Icon name="check" className="w-4 h-4 text-white" />}
                     </div>
-                    {/* 改為中粗體 (font-medium) */}
                     <span className={`text-[15px] font-medium transition-all leading-snug tracking-wide ${item.completed ? 'line-through text-gray-400 opacity-60' : 'text-tokyo-ink'}`}>{item.name}</span>
                 </div>
                 <div className="flex items-center space-x-2 shrink-0">
@@ -138,6 +160,7 @@ export const ListsView = ({ type }: { type: ListType }) => {
         ))}
       </div>
 
+      {/* 編輯 Modal */}
       <Modal isOpen={!!editingItem} onClose={() => setEditingItem(null)} title="編輯項目">
         <div className="space-y-6">
             <input 
@@ -152,6 +175,21 @@ export const ListsView = ({ type }: { type: ListType }) => {
             </div>
         </div>
       </Modal>
+
+      {/* 重置確認 Modal */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center px-6">
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowResetConfirm(false)}></div>
+            <div className="relative bg-white p-6 border-t-8 border-tokyo-gold shadow-2xl rect-ui w-full max-w-sm text-center">
+                <h4 className="font-bold text-base mb-2 text-tokyo-ink font-serif">重置清單？</h4>
+                <p className="text-sm text-gray-500 mb-6 leading-relaxed">這將會清除您目前的手動更動，並同步 GitHub 上的最新預設清單內容。</p>
+                <div className="grid grid-cols-2 gap-3">
+                    <button onClick={() => setShowResetConfirm(false)} className="py-3 border-2 border-gray-200 text-sm font-bold rect-ui text-gray-400">取消</button>
+                    <button onClick={handleReset} className="py-3 bg-tokyo-ink text-white text-sm font-bold rect-ui shadow-md">確定重置</button>
+                </div>
+            </div>
+        </div>
+      )}
     </div>
   );
 };
