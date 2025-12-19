@@ -7,8 +7,8 @@ export const APP_CONFIG = {
 };
 
 export const LUGGAGE_WARNINGS = {
-  'carry-on': '⚠️ 液體容器限 100ml 以內，且需裝入透明夾鏈袋。',
-  'checked': '🚫 嚴禁攜帶行動電源、鋰電池及打火機於托運行李。'
+  'carry-on': '⚠️ 液體容器限 100ml 以內，且需裝入透明夾鏈袋',
+  'checked': '🚫 嚴禁攜帶行動電源、鋰電池及打火機於托運行李'
 };
 
 export const ITINERARY_DATA: DailyItinerary[] = [
