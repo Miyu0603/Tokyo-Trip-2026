@@ -13,9 +13,11 @@ function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
 
   useEffect(() => {
-    fetchTokyoWeather().then(setWeather);
+    // 延遲 500ms 抓取天氣，讓主線程優先處理 UI 渲染
+    const timer = setTimeout(() => {
+      fetchTokyoWeather().then(setWeather);
+    }, 500);
 
-    // 解決 iOS PWA 鍵盤收起後視圖卡住的 Bug
     const handleFocusOut = (e: FocusEvent) => {
       const target = e.target as HTMLElement;
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
@@ -25,7 +27,10 @@ function App() {
     };
 
     window.addEventListener('focusout', handleFocusOut);
-    return () => window.removeEventListener('focusout', handleFocusOut);
+    return () => {
+      window.removeEventListener('focusout', handleFocusOut);
+      clearTimeout(timer);
+    };
   }, []);
 
   const renderContent = () => {
@@ -50,7 +55,6 @@ function App() {
   ];
 
   return (
-    /* 使用 h-[100dvh] 替代 h-screen，動態計算視窗高度 */
     <div className="h-[100dvh] flex flex-col font-sans text-tokyo-ink max-w-md mx-auto bg-white border-x border-gray-100 relative shadow-2xl overflow-hidden">
       
       {/* Header */}
@@ -66,14 +70,15 @@ function App() {
             </h1>
           </div>
           
-          <div className="flex items-center space-x-2 mt-1">
+          {/* 優化：固定寬高與背景顏色，減少 CLS 並提升視覺穩定性 */}
+          <div className="flex items-center space-x-2 mt-1 min-w-[56px] min-h-[28px]">
              {weather ? (
-                <div className="flex items-center space-x-1 text-tokyo-ink bg-gray-50 px-2 py-1 rect-ui border border-gray-100">
+                <div className="flex items-center space-x-1 text-tokyo-ink bg-gray-50 px-2 py-1 rect-ui border border-gray-100 animate-in fade-in zoom-in-95 duration-300">
                     <Icon name={getWeatherIcon(weather.code)} className="w-4 h-4 text-tokyo-gold" />
                     <span className="text-sm font-bold font-mono">{weather.temperature}°</span>
                 </div>
              ) : (
-                <div className="w-8 h-4 bg-gray-50 animate-pulse"></div>
+                <div className="w-14 h-7 bg-gray-50 rect-ui border border-gray-100 animate-pulse"></div>
              )}
           </div>
         </div>
@@ -104,7 +109,7 @@ function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar bg-[#F7F6F2]">
-        <div className="animate-in fade-in duration-500 h-full">
+        <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 h-full">
           {renderContent()}
         </div>
       </main>
