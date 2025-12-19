@@ -20,9 +20,10 @@ function App() {
     switch (activeTab) {
       case 'itinerary': return <ItineraryView />;
       case 'cost': return <CostView />;
-      case 'prep': return <ListsView type="prep" />;
-      case 'luggage': return <ListsView type="luggage" />;
-      case 'shopping': return <ListsView type="shopping" />;
+      // 加入 key={activeTab} 是關鍵，強迫 React 重新渲染組件並載入對應的資料
+      case 'prep': return <ListsView key="prep" type="prep" />;
+      case 'luggage': return <ListsView key="luggage" type="luggage" />;
+      case 'shopping': return <ListsView key="shopping" type="shopping" />;
       case 'info': return <InfoView />;
       default: return <ItineraryView />;
     }
@@ -91,7 +92,7 @@ function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar bg-[#F7F6F2]">
-        <div className="animate-in fade-in duration-500">
+        <div className="animate-in fade-in duration-500 h-full">
           {renderContent()}
         </div>
       </main>
