@@ -14,6 +14,18 @@ function App() {
 
   useEffect(() => {
     fetchTokyoWeather().then(setWeather);
+
+    // 解決 iOS PWA 鍵盤收起後視圖卡住的 Bug
+    const handleFocusOut = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+      }
+    };
+
+    window.addEventListener('focusout', handleFocusOut);
+    return () => window.removeEventListener('focusout', handleFocusOut);
   }, []);
 
   const renderContent = () => {
@@ -38,17 +50,17 @@ function App() {
   ];
 
   return (
-    <div className="h-screen flex flex-col font-sans text-tokyo-ink max-w-md mx-auto bg-white border-x border-gray-100 relative shadow-2xl overflow-hidden">
+    /* 使用 h-[100dvh] 替代 h-screen，動態計算視窗高度 */
+    <div className="h-[100dvh] flex flex-col font-sans text-tokyo-ink max-w-md mx-auto bg-white border-x border-gray-100 relative shadow-2xl overflow-hidden">
       
       {/* Header */}
-      <header className="z-40 bg-white pt-safe-top">
+      <header className="z-40 bg-white pt-safe-top shrink-0">
         <div className="px-5 pt-6 pb-4 flex justify-between items-start">
           <div>
             <div className="flex items-center space-x-2 mb-1.5">
                 <span className="bg-tokyo-ink text-white text-[10px] font-bold px-1.5 py-0.5 tracking-widest uppercase font-mono">2026</span>
                 <span className="text-[10px] text-gray-500 font-bold tracking-[0.2em] uppercase font-serif">Tokyo Trip</span>
             </div>
-            {/* 標題縮小 1 級 (2xl -> xl) */}
             <h1 className="text-xl font-serif font-bold text-tokyo-ink tracking-[0.05em] leading-tight">
               東京冬之旅
             </h1>
@@ -98,7 +110,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-50 py-2.5 px-6 flex justify-center items-center pointer-events-none">
+      <footer className="bg-white border-t border-gray-50 py-2.5 px-6 flex justify-center items-center pointer-events-none shrink-0">
           <span className="text-[9px] font-mono text-gray-400 tracking-[0.4em] uppercase">Memories 2026</span>
       </footer>
     </div>
