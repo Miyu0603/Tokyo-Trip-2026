@@ -53,6 +53,14 @@
       }
     </script>
     <style>
+      /* 禁止全域過度捲動，解決 iOS 視圖位移問題 */
+      html, body {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        position: fixed;
+        background-color: #F7F6F2;
+      }
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       :root {
@@ -62,9 +70,9 @@
         --sal: env(safe-area-inset-left);
       }
       body {
-        background-color: #F7F6F2;
         padding-top: var(--sat);
         padding-bottom: var(--sab);
+        overscroll-behavior: none;
       }
       .rect-ui { border-radius: 0 !important; }
     </style>
@@ -82,12 +90,10 @@
 </head>
   <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
     <div id="root"></div>
-    <!-- 修正：移除前綴斜線，使用相對路徑 -->
     <script type="module" src="index.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          // 修正：使用相對路徑註冊 Service Worker
           navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed: ', err));
         });
       }
