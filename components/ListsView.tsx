@@ -5,67 +5,76 @@ import { Icon, Modal } from './Shared';
 
 type ListType = 'prep' | 'luggage' | 'shopping';
 
-export const ListsView = ({ type }: { type: ListType }) => {
+// Define the component using React.FC to allow standard React props like 'key' in parent components
+export const ListsView: React.FC<{ type: ListType }> = ({ type }) => {
   const getStorageKey = () => `tokyo_list_${type}`;
   
-  const [items, setItems] = useState<any[]>([]);
+  // 使用延遲初始化 (Lazy Initializer)，確保組件一建立就拿到正確的資料
+  const [items, setItems] = useState<any[]>(() => {
+    const saved = localStorage.getItem(`tokyo_list_${type}`);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return [];
+      }
+    }
+    // 預設資料
+    if (type === 'luggage') return INITIAL_PACKING_LIST;
+    if (type === 'shopping') return INITIAL_SHOPPING_LIST;
+    return [
+      {id: 'p-1', name: 'Visit Japan Web 完成', completed: false},
+      {id: 'p-2', name: '海外旅遊保險投保', completed: false},
+      {id: 'p-3', name: '日幣現金預兌換', completed: false},
+      {id: 'p-4', name: '網卡/漫遊數據設定', completed: false},
+    ];
+  });
+
   const [activeTab, setActiveTab] = useState<'carry-on'|'checked'>('checked');
   const [newItemName, setNewItemName] = useState('');
-  
   const [editingItem, setEditingItem] = useState<any | null>(null);
   const [editName, setEditName] = useState('');
 
+  // 當 items 變動時，立即儲存
   useEffect(() => {
-    const saved = localStorage.getItem(getStorageKey());
-    if (saved) {
-        setItems(JSON.parse(saved));
-    } else {
-        if (type === 'luggage') setItems(INITIAL_PACKING_LIST);
-        if (type === 'shopping') setItems(INITIAL_SHOPPING_LIST);
-        if (type === 'prep') setItems([
-            {id: 'p-1', name: 'Visit Japan Web 完成', completed: false},
-            {id: 'p-2', name: '海外旅遊保險投保', completed: false},
-            {id: 'p-3', name: '日幣現金預兌換', completed: false},
-            {id: 'p-4', name: '網卡/漫遊數據設定', completed: false},
-        ]);
-    }
-  }, [type]);
-
-  useEffect(() => {
-    if (items.length > 0) localStorage.setItem(getStorageKey(), JSON.stringify(items));
+    localStorage.setItem(getStorageKey(), JSON.stringify(items));
   }, [items, type]);
 
   const toggleItem = (id: string) => {
-    setItems(items.map(i => i.id === id ? { ...i, completed: !i.completed } : i));
+    setItems(prev => prev.map(i => i.id === id ? { ...i, completed: !i.completed } : i));
   };
 
   const addItem = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newItemName.trim()) return;
+    const name = newItemName.trim();
+    if (!name) return;
+
     const newItem = {
-        id: Date.now().toString(),
-        name: newItemName,
+        id: `custom-${Date.now()}`,
+        name: name,
         completed: false,
-        category: activeTab 
+        category: type === 'luggage' ? activeTab : 'general'
     };
-    setItems([...items, newItem]);
+    
+    setItems(prev => [...prev, newItem]);
     setNewItemName('');
   };
 
   const deleteItem = (id: string) => {
-      setItems(items.filter(i => i.id !== id));
-      if (editingItem?.id === id) setEditingItem(null);
+    setItems(prev => prev.filter(i => i.id !== id));
+    if (editingItem?.id === id) setEditingItem(null);
   };
 
   const openEdit = (item: any) => {
-      setEditingItem(item);
-      setEditName(item.name);
+    setEditingItem(item);
+    setEditName(item.name);
   };
 
   const saveEdit = () => {
-      if (!editName.trim()) return;
-      setItems(items.map(i => i.id === editingItem.id ? { ...i, name: editName } : i));
-      setEditingItem(null);
+    const name = editName.trim();
+    if (!name) return;
+    setItems(prev => prev.map(i => i.id === editingItem.id ? { ...i, name } : i));
+    setEditingItem(null);
   };
 
   const displayItems = type === 'luggage' 
@@ -97,8 +106,15 @@ export const ListsView = ({ type }: { type: ListType }) => {
       )}
 
       <form onSubmit={addItem} className="relative mb-6">
-        <input className="w-full pl-4 pr-12 py-3 bg-white border border-gray-100 rect-ui outline-none text-xs font-bold text-tokyo-ink" placeholder="新增內容..." value={newItemName} onChange={(e) => setNewItemName(e.target.value)} />
-        <button type="submit" className="absolute right-0 top-0 bottom-0 px-4 text-tokyo-ink flex items-center justify-center"><Icon name="plus" className="w-5 h-5" /></button>
+        <input 
+          className="w-full pl-4 pr-12 py-3 bg-white border border-gray-100 rect-ui outline-none text-xs font-bold text-tokyo-ink focus:border-tokyo-ink transition-colors" 
+          placeholder="新增內容..." 
+          value={newItemName} 
+          onChange={(e) => setNewItemName(e.target.value)} 
+        />
+        <button type="submit" className="absolute right-0 top-0 bottom-0 px-4 text-tokyo-ink flex items-center justify-center hover:text-tokyo-red transition-colors">
+          <Icon name="plus" className="w-5 h-5" />
+        </button>
       </form>
 
       <div className="space-y-3">
@@ -122,7 +138,12 @@ export const ListsView = ({ type }: { type: ListType }) => {
 
       <Modal isOpen={!!editingItem} onClose={() => setEditingItem(null)} title="編輯項目">
         <div className="space-y-4">
-            <input className="w-full px-4 py-3 bg-gray-50 border-b border-tokyo-ink outline-none text-base font-bold rect-ui" value={editName} onChange={e => setEditName(e.target.value)} autoFocus />
+            <input 
+              className="w-full px-4 py-3 bg-gray-50 border-b border-tokyo-ink outline-none text-base font-bold rect-ui" 
+              value={editName} 
+              onChange={e => setEditName(e.target.value)} 
+              autoFocus 
+            />
             <div className="grid grid-cols-2 gap-4">
                 <button onClick={() => setEditingItem(null)} className="py-3 border-2 border-gray-200 text-gray-500 font-bold rect-ui">取消</button>
                 <button onClick={saveEdit} className="py-3 bg-tokyo-ink text-white font-bold rect-ui">儲存</button>
