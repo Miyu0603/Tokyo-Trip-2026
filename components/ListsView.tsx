@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { INITIAL_PACKING_LIST, INITIAL_SHOPPING_LIST, LUGGAGE_WARNINGS } from '../constants';
 import { Icon, Modal } from './Shared';
@@ -32,6 +31,7 @@ export const ListsView: React.FC<{ type: ListType }> = ({ type }) => {
 
   const [luggageTab, setLuggageTab] = useState<'carry-on'|'checked'>('carry-on');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingItem, setEditingItem] = useState<any | null>(null);
   const [newItemName, setNewItemName] = useState('');
 
   useEffect(() => {
@@ -42,17 +42,36 @@ export const ListsView: React.FC<{ type: ListType }> = ({ type }) => {
     setItems(items.map(item => item.id === id ? { ...item, completed: !item.completed } : item));
   };
 
-  const addItem = () => {
+  const openAddModal = () => {
+    setEditingItem(null);
+    setNewItemName('');
+    setShowAddModal(true);
+  };
+
+  const openEditModal = (item: any) => {
+    setEditingItem(item);
+    setNewItemName(item.name);
+    setShowAddModal(true);
+  };
+
+  const handleSave = () => {
     if (!newItemName.trim()) return;
-    const newItem = {
-      id: Date.now().toString(),
-      name: newItemName,
-      completed: false,
-      category: type === 'luggage' ? luggageTab : 'general'
-    };
-    setItems([...items, newItem]);
+    
+    if (editingItem) {
+      setItems(items.map(item => item.id === editingItem.id ? { ...item, name: newItemName } : item));
+    } else {
+      const newItem = {
+        id: Date.now().toString(),
+        name: newItemName,
+        completed: false,
+        category: type === 'luggage' ? luggageTab : 'general'
+      };
+      setItems([...items, newItem]);
+    }
+    
     setNewItemName('');
     setShowAddModal(false);
+    setEditingItem(null);
   };
 
   const deleteItem = (id: string) => {
@@ -69,7 +88,7 @@ export const ListsView: React.FC<{ type: ListType }> = ({ type }) => {
         <h3 className="font-serif font-bold text-lg text-tokyo-ink tracking-widest uppercase">
           {type === 'luggage' ? '行李清單' : type === 'shopping' ? '購物清單' : '事前準備'}
         </h3>
-        <button onClick={() => setShowAddModal(true)} className="w-10 h-10 bg-tokyo-ink text-white flex items-center justify-center rect-ui shadow-md active:scale-95 transition-transform" aria-label="新增項目">
+        <button onClick={openAddModal} className="w-10 h-10 bg-tokyo-ink text-white flex items-center justify-center rect-ui shadow-md active:scale-95 transition-transform" aria-label="新增項目">
           <Icon name="plus" className="w-6 h-6" />
         </button>
       </div>
@@ -93,18 +112,25 @@ export const ListsView: React.FC<{ type: ListType }> = ({ type }) => {
             <button onClick={() => toggleItem(item.id)} className={`w-6 h-6 rect-ui border-2 flex items-center justify-center transition-all ${item.completed ? 'bg-tokyo-ink border-tokyo-ink text-white' : 'border-gray-200'}`} aria-label={item.completed ? "標記為未完成" : "標記為已完成"}>
               {item.completed && <Icon name="check" className="w-4 h-4" />}
             </button>
-            <span className={`flex-1 text-sm font-bold tracking-wide transition-all ${item.completed ? 'text-gray-400 line-through' : 'text-tokyo-ink'}`}>{item.name}</span>
-            <button onClick={() => deleteItem(item.id)} className="p-1 text-gray-400 hover:text-tokyo-red" aria-label="刪除項目">
-              <Icon name="trash" className="w-4 h-4" />
-            </button>
+            <span className={`flex-1 text-sm font-bold tracking-wide transition-all font-serif ${item.completed ? 'text-gray-400 line-through' : 'text-tokyo-ink'}`}>{item.name}</span>
+            <div className="flex items-center space-x-2">
+              <button onClick={() => openEditModal(item)} className="p-1 text-gray-400 hover:text-tokyo-ink" aria-label="編輯項目">
+                <Icon name="edit" className="w-4 h-4" />
+              </button>
+              <button onClick={() => deleteItem(item.id)} className="p-1 text-gray-400 hover:text-tokyo-red" aria-label="刪除項目">
+                <Icon name="trash" className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         ))}
       </div>
 
-      <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="新增項目">
+      <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title={editingItem ? "編輯項目" : "新增項目"}>
         <div className="space-y-6">
-          <input autoFocus className="w-full px-4 py-3 bg-gray-50 border-b-2 border-gray-200 outline-none text-lg font-bold rect-ui focus:border-tokyo-ink" placeholder="輸入名稱..." value={newItemName} onChange={e => setNewItemName(e.target.value)} onKeyDown={e => e.key === 'Enter' && addItem()} />
-          <button onClick={addItem} className="w-full py-4 bg-tokyo-ink text-white font-bold tracking-widest rect-ui shadow-lg active:opacity-90">確定新增</button>
+          <input autoFocus className="w-full px-4 py-3 bg-gray-50 border-b-2 border-gray-200 outline-none text-lg font-bold rect-ui focus:border-tokyo-ink font-serif" placeholder="輸入名稱..." value={newItemName} onChange={e => setNewItemName(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSave()} />
+          <button onClick={handleSave} className="w-full py-4 bg-tokyo-ink text-white font-bold tracking-widest rect-ui shadow-lg active:opacity-90 uppercase">
+            {editingItem ? '儲存變更' : '確定新增'}
+          </button>
         </div>
       </Modal>
     </div>

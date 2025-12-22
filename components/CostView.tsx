@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { CostItem } from '../types';
 import { Icon, Modal } from './Shared';
@@ -56,7 +55,7 @@ export const CostView = () => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudCosts));
       }
     } catch (err) {
-      // 靜默處理以提升效能感
+      // 靜默處理
     } finally {
       setIsSyncing(false);
     }
@@ -159,7 +158,7 @@ export const CostView = () => {
   return (
     <div className="pb-32 px-4 pt-4">
       {/* 總覽卡片 */}
-      <div className="bg-white border-2 border-tokyo-ink mb-6 rect-ui shadow-float overflow-hidden">
+      <div className="bg-white border-2 border-tokyo-ink mb-6 rect-ui shadow-sm overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 className="font-serif font-bold text-lg">旅費總覽</h3>
             <button onClick={handleSync} className={`p-1 ${isSyncing ? 'animate-spin text-tokyo-red' : 'text-gray-500'}`} aria-label="同步資料">
@@ -198,7 +197,7 @@ export const CostView = () => {
                 <span className={`px-2 py-0.5 text-[11px] font-bold rect-ui text-white shrink-0 ${item.payer === 'Anbao' ? 'bg-tokyo-anbao' : 'bg-tokyo-tingbao'}`}>
                     {item.payer === 'Anbao' ? '安寶' : '婷寶'}
                 </span>
-                <span className="font-medium text-tokyo-ink text-[15px] truncate leading-tight tracking-wide">{item.description}</span>
+                <span className="font-medium text-tokyo-ink text-[15px] truncate leading-tight tracking-wide font-serif">{item.description}</span>
               </div>
               <div className="flex items-center space-x-4">
                 <span className="font-mono text-[11px] text-gray-600 font-bold tracking-wider">{cleanDate(item.date)}</span>
@@ -267,58 +266,58 @@ export const CostView = () => {
       </Modal>
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={editingId ? "編輯消費" : "新增消費"}>
-        <div className="space-y-5">
+        <div className="space-y-4">
           <div className="flex gap-3">
             <div className="flex-[1.5]">
-              <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">日期 DATE</label>
-              <input className="w-full px-3 py-3 bg-gray-50 border-b-2 border-gray-200 outline-none text-[16px] font-mono rect-ui focus:border-tokyo-ink transition-colors" value={date} onChange={e => setDate(e.target.value)} placeholder="YYYY/MM/DD" />
+              <label className="text-[10px] text-gray-600 font-bold block mb-1 uppercase">日期 DATE</label>
+              <input className="w-full px-3 py-2 bg-gray-50 border-b-2 border-gray-200 outline-none text-[14px] font-mono rect-ui focus:border-tokyo-ink transition-colors" value={date} onChange={e => setDate(e.target.value)} placeholder="YYYY/MM/DD" />
             </div>
             <div className="flex-1">
-              <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">支付者 PAYER</label>
-              <div className="grid grid-cols-2 border-2 border-tokyo-ink rect-ui overflow-hidden h-[46px]">
+              <label className="text-[10px] text-gray-600 font-bold block mb-1 uppercase">支付者 PAYER</label>
+              <div className="grid grid-cols-2 border-2 border-tokyo-ink rect-ui overflow-hidden h-[38px]">
                 <button onClick={() => setPayer('Anbao')} className={`text-[12px] font-bold ${payer === 'Anbao' ? 'bg-tokyo-anbao text-white' : 'bg-white text-gray-600'}`}>安</button>
                 <button onClick={() => setPayer('Tingbao')} className={`text-[12px] font-bold ${payer === 'Tingbao' ? 'bg-tokyo-tingbao text-white' : 'bg-white text-gray-600'}`}>婷</button>
               </div>
             </div>
           </div>
           <div>
-            <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">內容 DESCRIPTION</label>
-            <input className="w-full px-3 py-3 bg-gray-50 border-b-2 border-gray-200 outline-none text-[18px] font-medium rect-ui focus:border-tokyo-ink transition-colors" placeholder="消費內容..." value={desc} onChange={e => setDesc(e.target.value)} />
+            <label className="text-[10px] text-gray-600 font-bold block mb-1 uppercase">內容 DESCRIPTION</label>
+            <input className="w-full px-3 py-2 bg-gray-50 border-b-2 border-gray-200 outline-none text-[16px] font-medium rect-ui focus:border-tokyo-ink transition-colors font-serif" placeholder="消費內容..." value={desc} onChange={e => setDesc(e.target.value)} />
           </div>
           <div>
-            <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">金額 AMOUNT</label>
-            <div className="flex items-center bg-gray-50 border-b-2 border-gray-200 focus-within:border-tokyo-ink transition-colors">
-                <input className="flex-1 px-3 py-3 bg-transparent outline-none text-3xl font-mono font-bold text-tokyo-ink" type="number" inputMode="decimal" value={amt} onChange={e => setAmt(e.target.value)} placeholder="0" />
-                <div className="flex bg-white h-full border-l border-gray-100">
-                    <button onClick={() => setCurr('JPY')} className={`px-4 py-2 text-[13px] font-bold ${curr === 'JPY' ? 'bg-tokyo-ink text-white' : 'text-gray-600 hover:text-tokyo-ink'}`}>JPY</button>
-                    <button onClick={() => setCurr('TWD')} className={`px-4 py-2 text-[13px] font-bold ${curr === 'TWD' ? 'bg-tokyo-ink text-white' : 'text-gray-600 hover:text-tokyo-ink'}`}>TWD</button>
+            <label className="text-[10px] text-gray-600 font-bold block mb-1 uppercase">金額 AMOUNT</label>
+            <div className="flex items-center bg-gray-50 border-b-2 border-gray-200 focus-within:border-tokyo-ink transition-colors overflow-hidden">
+                <input className="flex-1 min-w-0 px-3 py-2 bg-transparent outline-none text-2xl font-mono font-bold text-tokyo-ink" type="number" inputMode="decimal" value={amt} onChange={e => setAmt(e.target.value)} placeholder="0" />
+                <div className="flex shrink-0 bg-white h-[44px] border-l border-gray-100">
+                    <button onClick={() => setCurr('JPY')} className={`px-2.5 py-1 text-[11px] font-bold ${curr === 'JPY' ? 'bg-tokyo-ink text-white' : 'text-gray-600'}`}>JPY</button>
+                    <button onClick={() => setCurr('TWD')} className={`px-2.5 py-1 text-[11px] font-bold ${curr === 'TWD' ? 'bg-tokyo-ink text-white' : 'text-gray-600'}`}>TWD</button>
                 </div>
             </div>
           </div>
-          <div className="bg-gray-50 p-4 border border-gray-200 rect-ui space-y-4 shadow-inner">
+          <div className="bg-gray-50 p-3 border border-gray-200 rect-ui space-y-3 shadow-inner">
             <div className="flex items-center justify-between">
-              <span className="text-[14px] text-tokyo-ink font-bold">分帳模式</span>
-              <select value={split} onChange={(e) => setSplit(e.target.value as any)} className="bg-white px-2 py-1.5 border-2 border-tokyo-ink text-[12px] font-bold rect-ui outline-none">
-                <option value="average">50/50 平均分攤</option>
+              <span className="text-[12px] text-tokyo-ink font-bold">分帳模式</span>
+              <select value={split} onChange={(e) => setSplit(e.target.value as any)} className="bg-white px-2 py-1 border-2 border-tokyo-ink text-[11px] font-bold rect-ui outline-none">
+                <option value="average">平均分攤</option>
                 <option value="manual">自定義金額</option>
               </select>
             </div>
             {split === 'manual' && (
-              <div className="flex gap-3 pt-4 border-t border-dashed border-gray-300">
+              <div className="flex gap-3 pt-3 border-t border-dashed border-gray-300">
                 <div className="flex-1">
-                  <label className="text-[10px] text-tokyo-anbao font-bold block mb-1">安寶負擔</label>
-                  <input className="w-full px-2 py-2 bg-white border border-gray-200 rect-ui text-[16px] font-mono font-bold outline-none focus:border-tokyo-anbao" type="number" value={manualAmount} onChange={e => setManualAmount(e.target.value)} />
+                  <label className="text-[9px] text-tokyo-anbao font-bold block mb-1">安寶負擔</label>
+                  <input className="w-full px-2 py-1.5 bg-white border border-gray-200 rect-ui text-[14px] font-mono font-bold outline-none focus:border-tokyo-anbao" type="number" value={manualAmount} onChange={e => setManualAmount(e.target.value)} />
                 </div>
                 <div className="flex-1">
-                  <label className="text-[10px] text-tokyo-tingbao font-bold block mb-1 opacity-80">婷寶負擔</label>
-                  <div className="w-full px-2 py-2 bg-gray-100 text-[16px] font-mono font-bold text-gray-600 rect-ui font-medium">{splitPreview.tingbao.toLocaleString()}</div>
+                  <label className="text-[9px] text-tokyo-tingbao font-bold block mb-1 opacity-80">婷寶負擔</label>
+                  <div className="w-full px-2 py-1.5 bg-gray-100 text-[14px] font-mono font-bold text-gray-600 rect-ui font-medium">{splitPreview.tingbao.toLocaleString()}</div>
                 </div>
               </div>
             )}
           </div>
-          <div className="grid grid-cols-2 gap-4 pt-4">
-            <button onClick={() => setShowModal(false)} className="py-4 border-2 border-gray-200 text-sm font-bold text-gray-600 rect-ui active:bg-gray-50">取消</button>
-            <button onClick={handleSave} className="py-4 bg-tokyo-ink text-white text-sm font-bold rect-ui active:opacity-90 shadow-lg tracking-widest">儲存項目</button>
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <button onClick={() => setShowModal(false)} className="py-3 border-2 border-gray-200 text-sm font-bold text-gray-600 rect-ui active:bg-gray-50">取消</button>
+            <button onClick={handleSave} className="py-3 bg-tokyo-ink text-white text-sm font-bold rect-ui active:opacity-90 shadow-lg tracking-widest uppercase">儲存項目</button>
           </div>
         </div>
       </Modal>

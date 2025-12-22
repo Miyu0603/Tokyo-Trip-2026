@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ITINERARY_DATA } from '../constants';
 import { ItineraryItem } from '../types';
@@ -14,7 +13,7 @@ export const ItineraryView = () => {
 
   return (
     <div className="pb-24">
-      {/* Date Selector - 增加外層白底 py-2，並縮小黑底按鈕高度至 h-11 */}
+      {/* Date Selector */}
       <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md px-4 py-2 flex justify-center border-b border-gray-100 shadow-sm">
         <div className="flex w-full justify-between items-center max-w-sm">
             {ITINERARY_DATA.map((day, idx) => {
@@ -46,7 +45,7 @@ export const ItineraryView = () => {
                 {currentDay.dayLabel.includes(' - ') ? currentDay.dayLabel.split(' - ')[1] : currentDay.dayLabel}
             </h2>
             {currentDay.hotel && (
-              <div className="flex items-center text-[12px] font-bold text-gray-500">
+              <div className="flex items-center text-[12px] font-bold text-gray-500 font-serif">
                 <Icon name="luggage" className="w-3 h-3 mr-2 text-tokyo-gold" />
                 {(!isLastDay && currentDay.hotelMapUrl) ? (
                   <a 
@@ -82,11 +81,11 @@ export const ItineraryView = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                             {item.icon && <span className="text-lg">{item.icon}</span>}
-                            <h3 className="font-medium text-tokyo-ink text-[15px] leading-tight tracking-wide">{item.title}</h3>
+                            <h3 className="font-bold text-tokyo-ink text-[15px] leading-tight tracking-wide font-serif">{item.title}</h3>
                         </div>
                       </div>
                       {item.transport && (
-                          <div className="text-[9px] text-tokyo-gold font-bold uppercase mt-2 px-2 py-0.5 bg-tokyo-gold/5 inline-block border border-tokyo-gold/10 tracking-widest">
+                          <div className="text-[9px] text-tokyo-gold font-bold uppercase mt-2 px-2 py-0.5 bg-tokyo-gold/5 inline-block border border-tokyo-gold/10 tracking-widest font-serif">
                               {item.transport.detail}
                           </div>
                       )}
@@ -105,10 +104,10 @@ export const ItineraryView = () => {
                 <div className="flex flex-col space-y-4">
                   <div className="space-y-2">
                     {selectedItem.location.description && (
-                      <p className="text-lg font-bold text-tokyo-ink leading-tight">{selectedItem.location.description}</p>
+                      <p className="text-lg font-bold text-tokyo-ink leading-tight font-serif">{selectedItem.location.description}</p>
                     )}
                     {selectedItem.location.address && (
-                      <p className="text-sm text-gray-500 font-medium leading-relaxed">{selectedItem.location.address}</p>
+                      <p className="text-sm text-gray-500 font-medium leading-relaxed font-serif">{selectedItem.location.address}</p>
                     )}
                   </div>
                   {selectedItem.location.mapUrl && (
@@ -116,7 +115,7 @@ export const ItineraryView = () => {
                       href={selectedItem.location.mapUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center w-full py-4 bg-tokyo-ink text-white rect-ui font-bold text-base transition-opacity active:opacity-90 shadow-lg"
+                      className="flex items-center justify-center w-full py-4 bg-tokyo-ink text-white rect-ui font-bold text-base transition-opacity active:opacity-90 shadow-lg uppercase"
                     >
                       <span>開啟 Google Maps</span>
                     </a>
@@ -133,7 +132,7 @@ export const ItineraryView = () => {
                             {selectedItem.notes.map((note, i) => (
                                 <li key={i} className="flex items-start">
                                     <span className="text-tokyo-red mr-3 font-mono">▸</span> 
-                                    <span className="leading-relaxed font-light">{note}</span>
+                                    <span className="leading-relaxed font-serif">{note}</span>
                                 </li>
                             ))}
                         </ul>
