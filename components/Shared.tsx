@@ -14,7 +14,6 @@ export const Icon = ({ name, className = "w-6 h-6" }: { name: string; className?
     plus: <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />,
     calc: <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />,
     trash: <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />,
-    // 改為鋼筆圖示 (Pen Icon)
     edit: <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />,
     sync: <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />,
     link: <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />,
@@ -26,7 +25,14 @@ export const Icon = ({ name, className = "w-6 h-6" }: { name: string; className?
   };
 
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg 
+      className={className} 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke="currentColor" 
+      strokeWidth={2}
+      aria-hidden="true" /* 優化：裝飾性圖示不應被朗讀 */
+    >
       {icons[name] || icons['info']}
     </svg>
   );
@@ -43,12 +49,12 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal="true">
         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] animate-in fade-in duration-200" onClick={onClose}></div>
         <div className="relative w-full max-w-full sm:max-w-md bg-white border-t-[10px] border-tokyo-ink p-8 shadow-2xl transform transition-all animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto no-scrollbar rect-ui">
             <div className="flex justify-between items-center mb-8">
                 <h3 className="text-2xl font-serif font-bold text-tokyo-ink tracking-widest">{title}</h3>
-                <button onClick={onClose} className="p-2 -mr-2 text-gray-400 hover:text-tokyo-red transition active:scale-90">
+                <button onClick={onClose} className="p-2 -mr-2 text-gray-500 hover:text-tokyo-red transition active:scale-90" aria-label="關閉彈窗">
                     <Icon name="close" className="w-7 h-7" />
                 </button>
             </div>

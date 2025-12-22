@@ -56,7 +56,7 @@ export const CostView = () => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudCosts));
       }
     } catch (err) {
-      console.error("Sync Error:", err);
+      // 靜默處理以提升效能感
     } finally {
       setIsSyncing(false);
     }
@@ -162,17 +162,17 @@ export const CostView = () => {
       <div className="bg-white border-2 border-tokyo-ink mb-6 rect-ui shadow-float overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 className="font-serif font-bold text-lg">旅費總覽</h3>
-            <button onClick={handleSync} className={`p-1 ${isSyncing ? 'animate-spin text-tokyo-red' : 'text-gray-400'}`}>
+            <button onClick={handleSync} className={`p-1 ${isSyncing ? 'animate-spin text-tokyo-red' : 'text-gray-500'}`} aria-label="同步資料">
                 <Icon name="sync" className="w-5 h-5" />
             </button>
         </div>
         <div className="grid grid-cols-2 divide-x divide-gray-100 border-b border-gray-100">
             <div className="py-4 text-center">
-                <span className="block text-[10px] font-bold text-gray-400 mb-1 uppercase tracking-widest">JPY</span>
+                <span className="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">JPY</span>
                 <span className="text-2xl font-mono font-bold text-tokyo-ink">¥{totals.jpy.toLocaleString()}</span>
             </div>
             <div className="py-4 text-center">
-                <span className="block text-[10px] font-bold text-gray-400 mb-1 uppercase tracking-widest">TWD</span>
+                <span className="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">TWD</span>
                 <span className="text-2xl font-mono font-bold text-tokyo-ink">${totals.twd.toLocaleString()}</span>
             </div>
         </div>
@@ -183,14 +183,14 @@ export const CostView = () => {
 
       <div className="flex justify-between items-center mb-5 px-1">
         <h3 className="font-serif font-bold text-base text-tokyo-ink tracking-widest underline decoration-tokyo-gold decoration-4 underline-offset-4">支出明細</h3>
-        <button onClick={openAddModal} className="w-10 h-10 bg-tokyo-ink text-white flex items-center justify-center rect-ui shadow-lg active:scale-95 transition-transform">
+        <button onClick={openAddModal} className="w-10 h-10 bg-tokyo-ink text-white flex items-center justify-center rect-ui shadow-lg active:scale-95 transition-transform" aria-label="新增項目">
           <Icon name="plus" className="w-6 h-6" />
         </button>
       </div>
 
       <div className="space-y-3 mb-8">
         {costs.length === 0 ? (
-            <div className="py-12 text-center text-gray-300 text-sm italic border-2 border-dashed border-gray-100 rect-ui font-light">尚無紀錄</div>
+            <div className="py-12 text-center text-gray-500 text-sm italic border-2 border-dashed border-gray-200 rect-ui font-light">尚無紀錄</div>
         ) : costs.map(item => (
           <div key={item.id} className="bg-white px-4 py-4 flex justify-between items-center rect-ui border border-gray-100 shadow-sm active:bg-gray-50 transition-colors">
             <div className="flex flex-col flex-1 overflow-hidden mr-4">
@@ -198,11 +198,10 @@ export const CostView = () => {
                 <span className={`px-2 py-0.5 text-[11px] font-bold rect-ui text-white shrink-0 ${item.payer === 'Anbao' ? 'bg-tokyo-anbao' : 'bg-tokyo-tingbao'}`}>
                     {item.payer === 'Anbao' ? '安寶' : '婷寶'}
                 </span>
-                {/* 改為中粗體 (font-medium) */}
                 <span className="font-medium text-tokyo-ink text-[15px] truncate leading-tight tracking-wide">{item.description}</span>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="font-mono text-[11px] text-gray-400 font-bold tracking-wider">{cleanDate(item.date)}</span>
+                <span className="font-mono text-[11px] text-gray-600 font-bold tracking-wider">{cleanDate(item.date)}</span>
                 {item.splitType === 'manual' && <span className="text-[9px] text-tokyo-gold font-bold px-1.5 py-0.5 bg-tokyo-gold/5 border border-tokyo-gold/10 tracking-widest">手動分帳</span>}
               </div>
             </div>
@@ -211,8 +210,8 @@ export const CostView = () => {
                 {item.currency === 'JPY' ? '¥' : '$'}{item.amount.toLocaleString()}
               </span>
               <div className="flex items-center space-x-1.5">
-                <button onClick={() => openEditModal(item)} className="text-gray-300 hover:text-tokyo-ink p-1.5 transition-colors"><Icon name="edit" className="w-5 h-5" /></button>
-                <button onClick={() => setShowDeleteConfirm(item.id)} className="text-gray-300 hover:text-tokyo-red p-1.5 transition-colors"><Icon name="trash" className="w-5 h-5" /></button>
+                <button onClick={() => openEditModal(item)} className="text-gray-500 hover:text-tokyo-ink p-1.5 transition-colors" aria-label="編輯"><Icon name="edit" className="w-5 h-5" /></button>
+                <button onClick={() => setShowDeleteConfirm(item.id)} className="text-gray-500 hover:text-tokyo-red p-1.5 transition-colors" aria-label="刪除"><Icon name="trash" className="w-5 h-5" /></button>
               </div>
             </div>
           </div>
@@ -220,8 +219,8 @@ export const CostView = () => {
       </div>
 
       <div className="px-1">
-          <a href={SHEET_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center w-full py-4 border-2 border-dashed border-gray-200 text-gray-400 text-sm font-bold rect-ui active:bg-gray-50 transition-all tracking-widest uppercase">
-              <Icon name="link" className="w-4 h-4 mr-2 opacity-50" />
+          <a href={SHEET_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center w-full py-4 border-2 border-dashed border-gray-200 text-gray-600 text-sm font-bold rect-ui active:bg-gray-50 transition-all tracking-widest uppercase">
+              <Icon name="link" className="w-4 h-4 mr-2 opacity-70" />
               <span>Google Sheets Report</span>
           </a>
       </div>
@@ -229,10 +228,10 @@ export const CostView = () => {
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-6">
             <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowDeleteConfirm(null)}></div>
-            <div className="relative bg-white p-6 border-t-8 border-tokyo-red shadow-2xl rect-ui w-full max-w-sm text-center">
-                <h4 className="font-bold text-base mb-5 text-tokyo-ink">確定要刪除這筆紀錄嗎？</h4>
+            <div className="relative bg-white p-6 border-t-8 border-tokyo-red shadow-2xl rect-ui w-full max-sm text-center">
+                <p className="font-bold text-base mb-5 text-tokyo-ink">確定要刪除這筆紀錄嗎？</p>
                 <div className="grid grid-cols-2 gap-3">
-                    <button onClick={() => setShowDeleteConfirm(null)} className="py-3 border-2 border-gray-200 text-sm font-bold rect-ui text-gray-400">取消</button>
+                    <button onClick={() => setShowDeleteConfirm(null)} className="py-3 border-2 border-gray-200 text-sm font-bold rect-ui text-gray-600">取消</button>
                     <button onClick={() => executeDelete(showDeleteConfirm)} className="py-3 bg-tokyo-red text-white text-sm font-bold rect-ui shadow-md">確定刪除</button>
                 </div>
             </div>
@@ -244,23 +243,23 @@ export const CostView = () => {
         <div className="space-y-6">
           <div className="bg-gray-50 border-2 border-tokyo-ink p-6 rect-ui text-center space-y-6">
             <div className="space-y-2">
-                <h4 className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">日幣結算 JPY</h4>
+                <h4 className="text-[10px] font-bold text-gray-500 tracking-widest uppercase">日幣結算 JPY</h4>
                 {settleSummary.jpy.abs > 0 ? (
                     <div className="space-y-1">
                         <p className="text-sm font-bold text-tokyo-ink font-light">{settleSummary.jpy.diff > 0 ? '安寶 應支付 婷寶' : '婷寶 應支付 安寶'}</p>
                         <p className="text-4xl font-mono font-bold text-tokyo-red">¥{settleSummary.jpy.abs.toLocaleString()}</p>
                     </div>
-                ) : <p className="text-gray-400 italic text-sm font-light">日幣項目已結清</p>}
+                ) : <p className="text-gray-500 italic text-sm font-light">日幣項目已結清</p>}
             </div>
             <div className="w-12 h-[1px] bg-gray-200 mx-auto"></div>
             <div className="space-y-2">
-                <h4 className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">台幣結算 TWD</h4>
+                <h4 className="text-[10px] font-bold text-gray-500 tracking-widest uppercase">台幣結算 TWD</h4>
                 {settleSummary.twd.abs > 0 ? (
                     <div className="space-y-1">
                         <p className="text-sm font-bold text-tokyo-ink font-light">{settleSummary.twd.diff > 0 ? '安寶 應支付 婷寶' : '婷寶 應支付 安寶'}</p>
                         <p className="text-4xl font-mono font-bold text-tokyo-red">${settleSummary.twd.abs.toLocaleString()}</p>
                     </div>
-                ) : <p className="text-gray-400 italic text-sm font-light">台幣項目已結清</p>}
+                ) : <p className="text-gray-500 italic text-sm font-light">台幣項目已結清</p>}
             </div>
           </div>
           <button onClick={() => setShowSettleModal(false)} className="w-full py-4 bg-tokyo-ink text-white font-bold text-base rect-ui active:opacity-90 shadow-lg tracking-widest">確認完成</button>
@@ -271,28 +270,28 @@ export const CostView = () => {
         <div className="space-y-5">
           <div className="flex gap-3">
             <div className="flex-[1.5]">
-              <label className="text-[11px] text-gray-400 font-bold block mb-1.5 uppercase">日期 DATE</label>
+              <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">日期 DATE</label>
               <input className="w-full px-3 py-3 bg-gray-50 border-b-2 border-gray-200 outline-none text-[16px] font-mono rect-ui focus:border-tokyo-ink transition-colors" value={date} onChange={e => setDate(e.target.value)} placeholder="YYYY/MM/DD" />
             </div>
             <div className="flex-1">
-              <label className="text-[11px] text-gray-400 font-bold block mb-1.5 uppercase">支付者 PAYER</label>
+              <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">支付者 PAYER</label>
               <div className="grid grid-cols-2 border-2 border-tokyo-ink rect-ui overflow-hidden h-[46px]">
-                <button onClick={() => setPayer('Anbao')} className={`text-[12px] font-bold ${payer === 'Anbao' ? 'bg-tokyo-anbao text-white' : 'bg-white text-gray-400'}`}>安</button>
-                <button onClick={() => setPayer('Tingbao')} className={`text-[12px] font-bold ${payer === 'Tingbao' ? 'bg-tokyo-tingbao text-white' : 'bg-white text-gray-400'}`}>婷</button>
+                <button onClick={() => setPayer('Anbao')} className={`text-[12px] font-bold ${payer === 'Anbao' ? 'bg-tokyo-anbao text-white' : 'bg-white text-gray-600'}`}>安</button>
+                <button onClick={() => setPayer('Tingbao')} className={`text-[12px] font-bold ${payer === 'Tingbao' ? 'bg-tokyo-tingbao text-white' : 'bg-white text-gray-600'}`}>婷</button>
               </div>
             </div>
           </div>
           <div>
-            <label className="text-[11px] text-gray-400 font-bold block mb-1.5 uppercase">內容 DESCRIPTION</label>
+            <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">內容 DESCRIPTION</label>
             <input className="w-full px-3 py-3 bg-gray-50 border-b-2 border-gray-200 outline-none text-[18px] font-medium rect-ui focus:border-tokyo-ink transition-colors" placeholder="消費內容..." value={desc} onChange={e => setDesc(e.target.value)} />
           </div>
           <div>
-            <label className="text-[11px] text-gray-400 font-bold block mb-1.5 uppercase">金額 AMOUNT</label>
+            <label className="text-[11px] text-gray-600 font-bold block mb-1.5 uppercase">金額 AMOUNT</label>
             <div className="flex items-center bg-gray-50 border-b-2 border-gray-200 focus-within:border-tokyo-ink transition-colors">
                 <input className="flex-1 px-3 py-3 bg-transparent outline-none text-3xl font-mono font-bold text-tokyo-ink" type="number" inputMode="decimal" value={amt} onChange={e => setAmt(e.target.value)} placeholder="0" />
                 <div className="flex bg-white h-full border-l border-gray-100">
-                    <button onClick={() => setCurr('JPY')} className={`px-4 py-2 text-[13px] font-bold ${curr === 'JPY' ? 'bg-tokyo-ink text-white' : 'text-gray-400 hover:text-tokyo-ink'}`}>JPY</button>
-                    <button onClick={() => setCurr('TWD')} className={`px-4 py-2 text-[13px] font-bold ${curr === 'TWD' ? 'bg-tokyo-ink text-white' : 'text-gray-400 hover:text-tokyo-ink'}`}>TWD</button>
+                    <button onClick={() => setCurr('JPY')} className={`px-4 py-2 text-[13px] font-bold ${curr === 'JPY' ? 'bg-tokyo-ink text-white' : 'text-gray-600 hover:text-tokyo-ink'}`}>JPY</button>
+                    <button onClick={() => setCurr('TWD')} className={`px-4 py-2 text-[13px] font-bold ${curr === 'TWD' ? 'bg-tokyo-ink text-white' : 'text-gray-600 hover:text-tokyo-ink'}`}>TWD</button>
                 </div>
             </div>
           </div>
@@ -311,14 +310,14 @@ export const CostView = () => {
                   <input className="w-full px-2 py-2 bg-white border border-gray-200 rect-ui text-[16px] font-mono font-bold outline-none focus:border-tokyo-anbao" type="number" value={manualAmount} onChange={e => setManualAmount(e.target.value)} />
                 </div>
                 <div className="flex-1">
-                  <label className="text-[10px] text-tokyo-tingbao font-bold block mb-1 opacity-60">婷寶負擔</label>
-                  <div className="w-full px-2 py-2 bg-gray-100 text-[16px] font-mono font-bold text-gray-500 rect-ui font-medium">{splitPreview.tingbao.toLocaleString()}</div>
+                  <label className="text-[10px] text-tokyo-tingbao font-bold block mb-1 opacity-80">婷寶負擔</label>
+                  <div className="w-full px-2 py-2 bg-gray-100 text-[16px] font-mono font-bold text-gray-600 rect-ui font-medium">{splitPreview.tingbao.toLocaleString()}</div>
                 </div>
               </div>
             )}
           </div>
           <div className="grid grid-cols-2 gap-4 pt-4">
-            <button onClick={() => setShowModal(false)} className="py-4 border-2 border-gray-200 text-sm font-bold text-gray-400 rect-ui active:bg-gray-50">取消</button>
+            <button onClick={() => setShowModal(false)} className="py-4 border-2 border-gray-200 text-sm font-bold text-gray-600 rect-ui active:bg-gray-50">取消</button>
             <button onClick={handleSave} className="py-4 bg-tokyo-ink text-white text-sm font-bold rect-ui active:opacity-90 shadow-lg tracking-widest">儲存項目</button>
           </div>
         </div>

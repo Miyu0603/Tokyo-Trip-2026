@@ -4,37 +4,35 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="https://lucide.dev/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <!-- ✅ 修正：移除 maximum-scale 和 user-scalable=no，允許使用者縮放以符合無障礙標準 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>東京冬之旅</title>
     
-    <!-- 1. DNS 預連線：加速外部 API 與 CDN 握手 -->
+    <!-- 加速外部資源握手 -->
     <link rel="preconnect" href="https://esm.sh" crossorigin />
-    <link rel="preconnect" href="https://api.open-meteo.com" />
-    <link rel="dns-prefetch" href="https://esm.sh" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://api.open-meteo.com" />
 
     <!-- PWA Settings -->
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#C93630" />
     
-    <!-- iOS / Apple Mobile Web App Settings -->
+    <!-- iOS Settings -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="東京冬之旅" />
     <link rel="apple-touch-icon" href="icon-192.png" />
     
-    <!-- 2. 優化字體載入：加入 &display=swap 防止文字閃爍(FOIT) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- 優化字體載入：確保 display=swap 防止文字隱藏 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- 3. Module Preload：在解析時就先下載核心 JS，消除瀑布流效應 -->
+    <!-- 預載核心模組 -->
     <link rel="modulepreload" href="https://esm.sh/react@^19.2.3" />
     <link rel="modulepreload" href="https://esm.sh/react-dom@^19.2.3/" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      // 將 Tailwind Config 放在最前面確保渲染效率
       window.tailwind.config = {
         theme: {
           extend: {
@@ -46,19 +44,15 @@
                 gold: '#C59D5F',
                 matcha: '#6A7F60',
                 sakura: '#F2D3D9',
-                gray: '#949495',
+                gray: '#71717A', /* 修正：使用較深的灰色 */
                 indigo: '#2E3A53',
-                anbao: '#F472B6',
-                tingbao: '#FB923C',
+                anbao: '#DB2777', /* 修正：加深對比 */
+                tingbao: '#EA580C', /* 修正：加深對比 */
               }
             },
             fontFamily: {
               serif: ['"Noto Serif JP"', 'serif'],
               sans: ['"Noto Sans JP"', '"Noto Sans TC"', 'sans-serif'],
-            },
-            boxShadow: {
-              'paper': '0 1px 2px rgba(0, 0, 0, 0.05)',
-              'float': '0 4px 0px rgba(0, 0, 0, 0.1)',
             }
           }
         }
@@ -71,21 +65,19 @@
         overflow: hidden;
         position: fixed;
         background-color: #F7F6F2;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       :root {
         --sat: env(safe-area-inset-top);
-        --sar: env(safe-area-inset-right);
         --sab: env(safe-area-inset-bottom);
-        --sal: env(safe-area-inset-left);
       }
       body {
         padding-top: var(--sat);
         padding-bottom: var(--sab);
         overscroll-behavior: none;
-        /* 提升渲染層級 */
-        content-visibility: auto;
       }
       .rect-ui { border-radius: 0 !important; }
     </style>
@@ -100,16 +92,11 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
+  <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed: ', err));
-        });
-      }
-    </script>
-  </body>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>

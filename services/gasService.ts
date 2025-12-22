@@ -1,26 +1,17 @@
 
 import { CostItem } from '../types';
 
-/**
- * 儲存消費紀錄到 Google Sheets
- */
 export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' | 'edit' | 'delete' = 'add') => {
   if (!url) return;
   
   const amountTwd = item.currency === 'TWD' ? item.amount : 0;
   const amountJpy = item.currency === 'JPY' ? item.amount : 0;
   
-  let splitXiangTwd = 0, splitXiangJpy = 0, splitQianTwd = 0, splitQianJpy = 0;
-  
-  // 計算分帳份額
-  let xiangShare = 0;
-  let qianShare = 0;
-
+  let xiangShare = 0, qianShare = 0;
   if (item.splitType === 'average') {
     xiangShare = item.amount / 2;
     qianShare = item.amount / 2;
   } else {
-    // 手動分攤
     const manualAmt = item.manualAmount || 0;
     if (item.manualSplitPerson === 'Anbao') {
       xiangShare = manualAmt;
@@ -31,14 +22,6 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
     }
   }
 
-  if (item.currency === 'TWD') {
-    splitXiangTwd = xiangShare;
-    splitQianTwd = qianShare;
-  } else {
-    splitXiangJpy = xiangShare;
-    splitQianJpy = qianShare;
-  }
-
   const payload = {
     action,
     date: item.date.replace(/-/g, '/'),
@@ -46,10 +29,10 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
     payer: item.payer === 'Anbao' ? '安寶' : '婷寶',
     amountTwd,
     amountJpy,
-    splitXiangTwd,
-    splitXiangJpy,
-    splitQianTwd,
-    splitQianJpy,
+    splitXiangTwd: item.currency === 'TWD' ? xiangShare : 0,
+    splitXiangJpy: item.currency === 'JPY' ? xiangShare : 0,
+    splitQianTwd: item.currency === 'TWD' ? qianShare : 0,
+    splitQianJpy: item.currency === 'JPY' ? qianShare : 0,
     note: item.notes || "",
     rowIndex: item.id
   };
@@ -61,14 +44,9 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-  } catch (e) {
-    console.error("GAS API Error:", e);
-  }
+  } catch (e) {}
 };
 
-/**
- * 從 Google Sheets 讀取資料並自動判定分帳類型
- */
 export const fetchCostsFromGAS = async (url: string): Promise<CostItem[] | null> => {
   if (!url) return null;
   try {
@@ -81,8 +59,6 @@ export const fetchCostsFromGAS = async (url: string): Promise<CostItem[] | null>
             const twdVal = Number(row.twd || 0);
             const isJPY = jpyVal > 0;
             const total = isJPY ? jpyVal : twdVal;
-            
-            // 關鍵：從雲端份額判定分帳模式
             const cloudXiangShare = isJPY ? Number(row.splitXiangJpy || 0) : Number(row.splitXiangTwd || 0);
             const isAverage = Math.abs(cloudXiangShare - (total / 2)) < 0.1;
 
@@ -102,7 +78,6 @@ export const fetchCostsFromGAS = async (url: string): Promise<CostItem[] | null>
     }
     return [];
   } catch (e) {
-    console.error("GAS Fetch Error:", e);
     return null; 
   }
 };

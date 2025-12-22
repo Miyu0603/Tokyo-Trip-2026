@@ -20,17 +20,17 @@ export const InfoView = () => {
         </div>
         <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white border-2 border-tokyo-ink p-5 rect-ui shadow-paper flex flex-col justify-center">
-                    <span className="text-xs font-bold text-gray-400 mb-2 uppercase">警察局 Police</span>
+                <div className="bg-white border-2 border-tokyo-ink p-5 rect-ui shadow-sm flex flex-col justify-center">
+                    <span className="text-xs font-bold text-gray-600 mb-2 uppercase tracking-tighter">警察局 Police</span>
                     <span className="text-3xl font-mono font-bold text-tokyo-red tracking-tighter">110</span>
                 </div>
-                <div className="bg-white border-2 border-tokyo-ink p-5 rect-ui shadow-paper flex flex-col justify-center">
-                    <span className="text-xs font-bold text-gray-400 mb-2 uppercase">救護車 Ambulance</span>
+                <div className="bg-white border-2 border-tokyo-ink p-5 rect-ui shadow-sm flex flex-col justify-center">
+                    <span className="text-xs font-bold text-gray-600 mb-2 uppercase tracking-tighter">救護車 Ambulance</span>
                     <span className="text-3xl font-mono font-bold text-tokyo-red tracking-tighter">119</span>
                 </div>
             </div>
-            <div className="bg-white border-2 border-tokyo-ink p-5 rect-ui shadow-paper flex justify-between items-center">
-                <span className="text-xs font-bold text-gray-400 uppercase">外籍人士救援 Foreign Help</span>
+            <div className="bg-white border-2 border-tokyo-ink p-5 rect-ui shadow-sm flex justify-between items-center">
+                <span className="text-xs font-bold text-gray-600 uppercase tracking-tighter">外籍人士救援 Foreign Help</span>
                 <span className="text-xl font-mono font-bold text-tokyo-ink">050-3816-2787</span>
             </div>
         </div>
@@ -43,8 +43,8 @@ export const InfoView = () => {
         </div>
         <div className="grid grid-cols-2 gap-5">
             {links.map(l => (
-                <a key={l.name} href={l.url} target="_blank" className="bg-white p-6 border-2 border-tokyo-ink flex flex-col items-center justify-center text-center space-y-4 hover:bg-gray-50 active:scale-[0.97] transition-all rect-ui shadow-paper">
-                    <span className="text-5xl">{l.icon}</span>
+                <a key={l.name} href={l.url} target="_blank" rel="noopener noreferrer" className="bg-white p-6 border-2 border-tokyo-ink flex flex-col items-center justify-center text-center space-y-4 hover:bg-gray-50 active:scale-[0.97] transition-all rect-ui">
+                    <span className="text-5xl" role="img" aria-label={l.name}>{l.icon}</span>
                     <div className="border-t border-dashed border-gray-100 w-full pt-4">
                         <span className="block font-bold text-tokyo-ink text-sm tracking-tight leading-tight">{l.name}</span>
                     </div>
@@ -54,24 +54,23 @@ export const InfoView = () => {
       </div>
 
       {/* 注意事項 */}
-      <div className="bg-tokyo-ink text-white p-8 rect-ui shadow-2xl border-t-8 border-tokyo-gold relative overflow-hidden">
-         <div className="absolute -right-6 -bottom-6 text-white/5 text-[120px] font-serif select-none pointer-events-none">旅</div>
+      <div className="bg-tokyo-ink text-white p-8 rect-ui border-t-8 border-tokyo-gold relative overflow-hidden">
          <h3 className="font-serif font-bold text-lg mb-8 flex items-center border-b border-white/10 pb-4 tracking-widest">
             <span className="bg-tokyo-gold text-tokyo-ink text-xs font-bold px-3 py-1 rect-ui mr-4">NOTICE</span>
             旅途叮嚀
          </h3>
          <ul className="space-y-6 text-sm font-medium leading-relaxed tracking-wider font-serif">
             <li className="flex items-start">
-                <span className="text-tokyo-gold mr-4 font-mono text-base mt-0.5">01</span>
+                <span className="text-tokyo-gold mr-4 font-mono text-base mt-0.5" aria-hidden="true">01</span>
                 冬季日本極度乾燥，建議隨身攜帶保濕乳液、護唇膏與眼藥水。
             </li>
             <li className="flex items-start">
-                <span className="text-tokyo-gold mr-4 font-mono text-base mt-0.5">02</span>
-                1月均溫 2°C - 10°C，室內外溫差極大，強烈建議採「洋蔥式穿法」。
+                <span className="text-tokyo-gold mr-4 font-mono text-base mt-0.5" aria-hidden="true">02</span>
+                1月均溫 2°C - 10°C，建議採「洋蔥式穿法」。
             </li>
             <li className="flex items-start">
-                <span className="text-tokyo-gold mr-4 font-mono text-base mt-0.5">03</span>
-                冬季 16:50 左右即日落，戶外行程務必規劃早出，避免天黑掃興。
+                <span className="text-tokyo-gold mr-4 font-mono text-base mt-0.5" aria-hidden="true">03</span>
+                冬季 16:50 左右即日落，戶外行程務必規劃早出。
             </li>
          </ul>
       </div>
