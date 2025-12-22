@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const Icon = ({ name, className = "w-6 h-6" }: { name: string; className?: string }) => {
   const icons: Record<string, React.JSX.Element> = {
@@ -31,7 +30,7 @@ export const Icon = ({ name, className = "w-6 h-6" }: { name: string; className?
       viewBox="0 0 24 24" 
       stroke="currentColor" 
       strokeWidth={2}
-      aria-hidden="true" /* 優化：裝飾性圖示不應被朗讀 */
+      aria-hidden="true"
     >
       {icons[name] || icons['info']}
     </svg>
@@ -46,6 +45,24 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+  useEffect(() => {
+    if (isOpen) {
+      // 防止捲軸消失造成的位移 (CLS 優化)
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      if (scrollBarWidth > 0) {
+        document.body.style.paddingRight = `${scrollBarWidth}px`;
+      }
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (

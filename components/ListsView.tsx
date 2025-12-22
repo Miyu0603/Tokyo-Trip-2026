@@ -101,7 +101,8 @@ export const ListsView: React.FC<{ type: ListType }> = ({ type }) => {
       )}
 
       {type === 'luggage' && (
-        <div className="mb-6 p-4 bg-tokyo-gold/10 border-l-4 border-tokyo-gold rect-ui">
+        // CLS 優化：預留最小高度，防止切換 Tab 時警示框造成下方內容大幅跳動
+        <div className="mb-6 p-4 bg-tokyo-gold/10 border-l-4 border-tokyo-gold rect-ui min-h-[64px] flex items-center">
           <p className="text-[11px] font-bold text-tokyo-gold leading-relaxed">{LUGGAGE_WARNINGS[luggageTab]}</p>
         </div>
       )}
