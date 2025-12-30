@@ -1,18 +1,15 @@
 
-// 修正：快取 './' 而不是 '/'，並更新圖示網址
-const CACHE_NAME = 'tokyo-trip-v3';
+const CACHE_NAME = 'tokyo-trip-v4';
 const ASSETS = [
   './',
   'index.html',
   'manifest.json',
-  'https://img.icons8.com/color/192/tokyo-tower.png',
-  'https://img.icons8.com/color/512/tokyo-tower.png'
+  'icon-512.jpg'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // 使用 cache.addAll 抓取資源，此時 icon 會從 CDN 正常載入
       return cache.addAll(ASSETS);
     })
   );

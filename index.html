@@ -21,8 +21,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="東京冬之旅" />
-    <!-- 使用穩定高品質的東京塔圖示作為 Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/tokyo-tower.png" />
+    <!-- 指向您上傳的自定義 JPG 圖片 -->
+    <link rel="apple-touch-icon" href="icon-512.jpg" />
     
     <!-- 2. 優化字體載入 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,6 +99,7 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
   <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
     <div id="root"></div>
@@ -110,5 +111,6 @@
         });
       }
     </script>
-  </body>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>
