@@ -1,13 +1,25 @@
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CostItem } from '../types';
 import { Icon, Modal } from './Shared';
 import { saveCostToGAS, fetchCostsFromGAS } from '../services/gasService';
 import { APP_CONFIG } from '../constants';
-import { formatDate, cleanDateString } from '../services/utils';
 
 const STORAGE_KEY = 'tokyo_trip_costs';
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/116baK9qPQns_08hKuMYnp_OzXzC6lZdkVwUFn0Ry7lg/edit?gid=1478645828#gid=1478645828';
+
+const getLocalDate = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}/${month}/${day}`;
+};
+
+const cleanDate = (dateStr: string) => {
+  if (!dateStr) return '';
+  return dateStr.substring(0, 10).replace(/-/g, '/').replace(/T.*/, '').trim();
+};
 
 export const CostView = () => {
   const [costs, setCosts] = useState<CostItem[]>([]);
@@ -17,7 +29,7 @@ export const CostView = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [date, setDate] = useState(formatDate());
+  const [date, setDate] = useState(getLocalDate());
   const [desc, setDesc] = useState('');
   const [amt, setAmt] = useState('');
   const [curr, setCurr] = useState<'JPY'|'TWD'>('JPY');
@@ -26,7 +38,15 @@ export const CostView = () => {
   const [manualAmount, setManualAmount] = useState(''); 
   const [notes, setNotes] = useState('');
 
-  const handleSync = useCallback(async () => {
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try { setCosts(JSON.parse(saved)); } catch (e) {}
+    }
+    handleSync(); 
+  }, []);
+
+  const handleSync = async () => {
     if (isSyncing) return;
     setIsSyncing(true);
     try {
@@ -40,26 +60,18 @@ export const CostView = () => {
     } finally {
       setIsSyncing(false);
     }
-  }, [isSyncing]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try { setCosts(JSON.parse(saved)); } catch (e) {}
-    }
-    handleSync(); 
-  }, []);
+  };
 
   const openAddModal = () => {
     setEditingId(null);
-    setDate(formatDate());
+    setDate(getLocalDate());
     setDesc(''); setAmt(''); setCurr('JPY'); setPayer('Anbao'); setSplit('average'); setManualAmount(''); setNotes('');
     setShowModal(true);
   };
 
   const openEditModal = (item: CostItem) => {
     setEditingId(item.id);
-    setDate(cleanDateString(item.date));
+    setDate(cleanDate(item.date));
     setDesc(item.description);
     setAmt(item.amount.toString());
     setCurr(item.currency);
@@ -76,7 +88,7 @@ export const CostView = () => {
     const total = parseFloat(amt);
     const newItem: CostItem = {
       id: editingId || Date.now().toString(),
-      date: cleanDateString(date),
+      date: cleanDate(date),
       description: desc,
       amount: total,
       currency: curr,
@@ -87,16 +99,13 @@ export const CostView = () => {
       notes
     };
 
-    // 先更新本地 UI 以確保反應靈敏
     const updatedCosts = editingId ? costs.map(c => c.id === editingId ? newItem : c) : [newItem, ...costs];
     setCosts(updatedCosts);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCosts));
     setShowModal(false);
 
-    // 背景同步至雲端
     await saveCostToGAS(newItem, APP_CONFIG.gasApiUrl, editingId ? 'edit' : 'add');
-    // 避免頻繁同步造成競態
-    setTimeout(handleSync, 2000);
+    setTimeout(handleSync, 1500);
   };
 
   const executeDelete = async (id: string) => {
@@ -149,6 +158,7 @@ export const CostView = () => {
 
   return (
     <div className="pb-32 px-4 pt-4">
+      {/* 總覽卡片 */}
       <div className="bg-white border-2 border-tokyo-ink mb-6 rect-ui shadow-float overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 className="font-serif font-bold text-lg">旅費總覽</h3>
@@ -188,10 +198,11 @@ export const CostView = () => {
                 <span className={`px-2 py-0.5 text-[11px] font-bold rect-ui text-white shrink-0 ${item.payer === 'Anbao' ? 'bg-tokyo-anbao' : 'bg-tokyo-tingbao'}`}>
                     {item.payer === 'Anbao' ? '安寶' : '婷寶'}
                 </span>
+                {/* 改為中粗體 (font-medium) */}
                 <span className="font-medium text-tokyo-ink text-[15px] truncate leading-tight tracking-wide">{item.description}</span>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="font-mono text-[11px] text-gray-400 font-bold tracking-wider">{item.date}</span>
+                <span className="font-mono text-[11px] text-gray-400 font-bold tracking-wider">{cleanDate(item.date)}</span>
                 {item.splitType === 'manual' && <span className="text-[9px] text-tokyo-gold font-bold px-1.5 py-0.5 bg-tokyo-gold/5 border border-tokyo-gold/10 tracking-widest">手動分帳</span>}
               </div>
             </div>
@@ -228,6 +239,7 @@ export const CostView = () => {
         </div>
       )}
 
+      {/* 結算 Modal */}
       <Modal isOpen={showSettleModal} onClose={() => setShowSettleModal(false)} title="結算精算">
         <div className="space-y-6">
           <div className="bg-gray-50 border-2 border-tokyo-ink p-6 rect-ui text-center space-y-6">
