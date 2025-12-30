@@ -1,10 +1,10 @@
 
-const CACHE_NAME = 'tokyo-trip-v4';
+const CACHE_NAME = 'tokyo-trip-v6';
 const ASSETS = [
   './',
-  'index.html',
-  'manifest.json',
-  'icon-512.jpg'
+  './index.html',
+  './manifest.json',
+  './icon-512.jpg'
 ];
 
 self.addEventListener('install', (event) => {

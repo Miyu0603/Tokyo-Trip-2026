@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>東京冬之旅</title>
     
-    <!-- 1. DNS 預連線：加速外部 API 與 CDN 握手 -->
     <link rel="preconnect" href="https://esm.sh" crossorigin />
     <link rel="preconnect" href="https://api.open-meteo.com" />
     <link rel="dns-prefetch" href="https://esm.sh" />
@@ -17,22 +16,16 @@
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#C93630" />
     
-    <!-- iOS / Apple Mobile Web App Settings -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Mobile Web App Settings -->
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="東京冬之旅" />
-    <!-- 指向您上傳的自定義 JPG 圖片 -->
     <link rel="apple-touch-icon" href="icon-512.jpg" />
     
-    <!-- 2. 優化字體載入 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- 3. Module Preload -->
-    <link rel="modulepreload" href="https://esm.sh/react@^19.2.3" />
-    <link rel="modulepreload" href="https://esm.sh/react-dom@^19.2.3/" />
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       window.tailwind.config = {
@@ -65,30 +58,13 @@
       }
     </script>
     <style>
-      html, body {
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-        position: fixed;
-        background-color: #F7F6F2;
-      }
+      html, body { height: 100%; width: 100%; overflow: hidden; position: fixed; background-color: #F7F6F2; }
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      :root {
-        --sat: env(safe-area-inset-top);
-        --sar: env(safe-area-inset-right);
-        --sab: env(safe-area-inset-bottom);
-        --sal: env(safe-area-inset-left);
-      }
-      body {
-        padding-top: var(--sat);
-        padding-bottom: var(--sab);
-        overscroll-behavior: none;
-        content-visibility: auto;
-      }
+      body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); overscroll-behavior: none; }
       .rect-ui { border-radius: 0 !important; }
     </style>
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.3",
@@ -103,7 +79,8 @@
 </head>
   <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
     <div id="root"></div>
-    <script type="module" src="index.tsx"></script>
+    <!-- 修正：使用相對路徑 -->
+    <script type="module" src="./index.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
