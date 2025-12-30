@@ -6,11 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>東京冬之旅</title>
     
-    <link rel="preconnect" href="https://esm.sh" crossorigin />
-    <link rel="preconnect" href="https://api.open-meteo.com" />
-    <link rel="dns-prefetch" href="https://esm.sh" />
-    <link rel="dns-prefetch" href="https://api.open-meteo.com" />
-
     <!-- PWA Settings -->
     <link rel="manifest" href="./manifest.json" />
     <meta name="theme-color" content="#C93630" />
@@ -78,7 +73,8 @@
 </head>
   <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <!-- Vite 會在 build 時自動處理此路徑 -->
+    <script type="module" src="/index.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -86,6 +82,5 @@
         });
       }
     </script>
-  <script type="module" src="/index.tsx"></script>
-</body>
+  </body>
 </html>

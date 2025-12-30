@@ -1,5 +1,6 @@
 
 import { CostItem } from '../types';
+import { cleanDateString } from './utils';
 
 /**
  * 儲存消費紀錄到 Google Sheets
@@ -10,8 +11,6 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
   const amountTwd = item.currency === 'TWD' ? item.amount : 0;
   const amountJpy = item.currency === 'JPY' ? item.amount : 0;
   
-  let splitXiangTwd = 0, splitXiangJpy = 0, splitQianTwd = 0, splitQianJpy = 0;
-  
   // 計算分帳份額
   let xiangShare = 0;
   let qianShare = 0;
@@ -20,7 +19,6 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
     xiangShare = item.amount / 2;
     qianShare = item.amount / 2;
   } else {
-    // 手動分攤
     const manualAmt = item.manualAmount || 0;
     if (item.manualSplitPerson === 'Anbao') {
       xiangShare = manualAmt;
@@ -31,30 +29,24 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
     }
   }
 
-  if (item.currency === 'TWD') {
-    splitXiangTwd = xiangShare;
-    splitQianTwd = qianShare;
-  } else {
-    splitXiangJpy = xiangShare;
-    splitQianJpy = qianShare;
-  }
-
   const payload = {
     action,
-    date: item.date.replace(/-/g, '/'),
+    date: cleanDateString(item.date),
     item: item.description,
     payer: item.payer === 'Anbao' ? '安寶' : '婷寶',
     amountTwd,
     amountJpy,
-    splitXiangTwd,
-    splitXiangJpy,
-    splitQianTwd,
-    splitQianJpy,
+    splitXiangTwd: item.currency === 'TWD' ? xiangShare : 0,
+    splitXiangJpy: item.currency === 'JPY' ? xiangShare : 0,
+    splitQianTwd: item.currency === 'TWD' ? qianShare : 0,
+    splitQianJpy: item.currency === 'JPY' ? qianShare : 0,
     note: item.notes || "",
     rowIndex: item.id
   };
 
   try {
+    // 註：GAS POST 必須使用 no-cors 以避開轉址造成的 CORS 攔截，
+    // 但這也意味著我們無法確切獲得 Response Body。
     await fetch(url, {
       method: 'POST',
       mode: 'no-cors', 
@@ -67,7 +59,7 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
 };
 
 /**
- * 從 Google Sheets 讀取資料並自動判定分帳類型
+ * 從 Google Sheets 讀取資料
  */
 export const fetchCostsFromGAS = async (url: string): Promise<CostItem[] | null> => {
   if (!url) return null;
@@ -82,13 +74,12 @@ export const fetchCostsFromGAS = async (url: string): Promise<CostItem[] | null>
             const isJPY = jpyVal > 0;
             const total = isJPY ? jpyVal : twdVal;
             
-            // 關鍵：從雲端份額判定分帳模式
             const cloudXiangShare = isJPY ? Number(row.splitXiangJpy || 0) : Number(row.splitXiangTwd || 0);
             const isAverage = Math.abs(cloudXiangShare - (total / 2)) < 0.1;
 
             return {
                 id: String(row.rowIndex),
-                date: String(row.date || "").replace(/'/g, "").replace(/-/g, '/'),
+                date: cleanDateString(String(row.date || "")),
                 description: String(row.item || ""),
                 payer: (row.payer === '婷寶' || row.payer === 'Tingbao') ? 'Tingbao' : 'Anbao',
                 amount: total,
