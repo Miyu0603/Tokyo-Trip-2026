@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          # 移除 cache: 'npm' 以避免鎖定檔案報錯
 
       - name: Install and Build
         run: |
