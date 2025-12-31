@@ -19,45 +19,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      window.tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              tokyo: {
-                red: '#C93630',
-                paper: '#F7F6F2',
-                ink: '#2B2B2B',
-                gold: '#C59D5F',
-                matcha: '#6A7F60',
-                sakura: '#F2D3D9',
-                gray: '#949495',
-                indigo: '#2E3A53',
-                anbao: '#F472B6',
-                tingbao: '#FB923C',
-              }
-            },
-            fontFamily: {
-              serif: ['"Noto Serif JP"', 'serif'],
-              sans: ['"Noto Sans JP"', '"Noto Sans TC"', 'sans-serif'],
-            },
-            boxShadow: {
-              'paper': '0 1px 2px rgba(0, 0, 0, 0.05)',
-              'float': '0 4px 0px rgba(0, 0, 0, 0.1)',
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      html, body { height: 100%; width: 100%; overflow: hidden; position: fixed; background-color: #F7F6F2; }
-      .no-scrollbar::-webkit-scrollbar { display: none; }
-      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); overscroll-behavior: none; }
-      .rect-ui { border-radius: 0 !important; }
-    </style>
   <script type="importmap">
 {
   "imports": {
@@ -73,7 +34,7 @@
 </head>
   <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
     <div id="root"></div>
-    <!-- Vite 會自動處理此處的模組路徑，路徑改為相對路徑以增加相容性 -->
+    <!-- Vite 會自動處理入口檔案 -->
     <script type="module" src="./index.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
