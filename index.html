@@ -1,105 +1,119 @@
-
 <!DOCTYPE html>
-<html lang="zh-TW" class="no-scrollbar">
+<html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="https://lucide.dev/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#FFFFFF" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="冬富士之旅">
-
-    <title>Winter Fuji & Hakone 2026</title>
+    <title>東京冬之旅</title>
     
-    <!-- Google Fonts: Noto Serif JP -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
-
-    <!-- Favicon (Browser Tab) - Keep SVG -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23F9F9F7'/%3E%3Cpath d='M64 416h384L308 140c-15-28-56-28-71 0L64 416z' fill='%235D7C8F'/%3E%3Cpath d='M256 128l68 120-38 24-30-40-30 40-38-24 68-120z' fill='%23FFFFFF'/%3E%3C/svg%3E" />
-    
-    <!-- Apple Touch Icon (iOS Home Screen) - 使用專案根目錄下的自定義圖片 -->
-    <link rel="apple-touch-icon" href="./icon-521.png" />
-
-    <!-- Android Manifest - 使用相對路徑 -->
+    <!-- PWA Settings -->
     <link rel="manifest" href="./manifest.json" />
-
+    <meta name="theme-color" content="#C93630" />
+    
+    <!-- Mobile Web App Settings -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="東京冬之旅" />
+    <link rel="apple-touch-icon" href="./icon-512.jpg" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
+      window.tailwind.config = {
         theme: {
           extend: {
             colors: {
-              'mag-paper': '#F9F9F7',       // Main Background (Off-white)
-              'mag-white': '#FFFFFF',       // Card Background
-              'mag-black': '#2C2C2C',       // Primary Text
-              'mag-gray': '#8E8E8E',        // Secondary Text/Lines
-              'mag-gold': '#C5A059',        // Accent/Highlight
-              'mag-gold-light': '#F4F1EA',  // Highlight Background
-              'mag-red': '#C63D0F',         // Warning/Highlight Text
+              tokyo: {
+                red: '#C93630',
+                paper: '#F7F6F2',
+                ink: '#2B2B2B',
+                gold: '#C59D5F',
+                matcha: '#6A7F60',
+                sakura: '#F2D3D9',
+                gray: '#949495',
+                indigo: '#2E3A53',
+                anbao: '#F472B6',
+                tingbao: '#FB923C',
+              }
             },
             fontFamily: {
-              sans: ['-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'Arial', 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', 'sans-serif'],
-              serif: ['Georgia', 'Times New Roman', 'serif'],
-              noto: ['"Noto Serif JP"', 'serif'],
+              serif: ['"Noto Serif JP"', 'serif'],
+              sans: ['"Noto Sans JP"', '"Noto Sans TC"', 'sans-serif'],
             },
             boxShadow: {
-              'soft': '0 4px 20px rgba(0, 0, 0, 0.03)',
-              'float': '0 10px 30px rgba(0, 0, 0, 0.08)',
-            },
-            padding: {
-              'safe-top': 'env(safe-area-inset-top)',
-              'safe-bottom': 'env(safe-area-inset-bottom)',
+              'paper': '0 1px 2px rgba(0, 0, 0, 0.05)',
+              'float': '0 4px 0px rgba(0, 0, 0, 0.1)',
             }
           }
         }
       }
     </script>
-    <style>
-      /* 全域隱藏捲軸，但保留捲動功能 */
-      html, body, .no-scrollbar {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;     /* Firefox */
-          overflow-x: hidden;        /* 防止左右晃動 */
-      }
 
-      *::-webkit-scrollbar {
-          display: none !important; /* Chrome, Safari and Opera */
+    <style type="text/tailwindcss">
+      @layer base {
+        html, body { 
+          height: 100%; 
+          width: 100%; 
+          overflow: hidden; 
+          position: fixed; 
+          background-color: #F7F6F2; 
+          padding-top: env(safe-area-inset-top); 
+          padding-bottom: env(safe-area-inset-bottom); 
+          overscroll-behavior: none;
+        }
       }
-
-      body {
-        -webkit-tap-highlight-color: transparent;
-        background-color: #F9F9F7;
-        position: relative;
-        width: 100%;
-        min-height: 100vh;
-      }
-
-      header {
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        background-color: #FFFFFF;
-      }
-      
-      #root {
-        width: 100%;
-        overflow-x: hidden;
+      @layer utilities {
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .rect-ui { border-radius: 0 !important; }
       }
     </style>
+
+    <!-- 強制清除所有 Service Worker 與 Cache Storage 以解決舊快取殘留問題 -->
+    <script>
+      (function() {
+        async function forceClearSW() {
+          try {
+            if ('serviceWorker' in navigator) {
+              const registrations = await navigator.serviceWorker.getRegistrations();
+              for (let registration of registrations) {
+                await registration.unregister();
+                console.log('SW Unregistered');
+              }
+            }
+            if ('caches' in window) {
+              const keys = await caches.keys();
+              for (let key of keys) {
+                await caches.delete(key);
+                console.log('Cache Deleted:', key);
+              }
+            }
+          } catch (e) {
+            console.error('Cleanup failed:', e);
+          }
+        }
+        forceClearSW();
+      })();
+    </script>
   <script type="importmap">
 {
   "imports": {
     "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
 </head>
-  <body class="bg-mag-paper text-mag-black antialiased selection:bg-mag-gold selection:text-white no-scrollbar">
-    <div id="root" class="no-scrollbar"></div>
-    <!-- 進入點腳本 - 使用相對路徑 ./ -->
+  <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
+    <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>
