@@ -73,6 +73,33 @@
         .rect-ui { border-radius: 0 !important; }
       }
     </style>
+
+    <!-- 強制清除所有 Service Worker 與 Cache Storage 以解決舊快取殘留問題 -->
+    <script>
+      (function() {
+        async function forceClearSW() {
+          try {
+            if ('serviceWorker' in navigator) {
+              const registrations = await navigator.serviceWorker.getRegistrations();
+              for (let registration of registrations) {
+                await registration.unregister();
+                console.log('SW Unregistered');
+              }
+            }
+            if ('caches' in window) {
+              const keys = await caches.keys();
+              for (let key of keys) {
+                await caches.delete(key);
+                console.log('Cache Deleted:', key);
+              }
+            }
+          } catch (e) {
+            console.error('Cleanup failed:', e);
+          }
+        }
+        forceClearSW();
+      })();
+    </script>
   <script type="importmap">
 {
   "imports": {
@@ -87,29 +114,7 @@
 </head>
   <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
     <div id="root"></div>
-    <!-- 引入入口檔案 -->
+    <!-- Vite 會處理 index.tsx 與其相依的 React 18 套件，不再需要 importmap -->
     <script type="module" src="./index.tsx"></script>
-    
-    <!-- 註冊 sw.js 以強制清除舊快取 -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(reg => {
-              console.log('SW registered to clear cache');
-              // 如果發現有新的 SW 在等待，強制更新
-              reg.onupdatefound = () => {
-                const installingWorker = reg.installing;
-                installingWorker.onstatechange = () => {
-                  if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    window.location.reload();
-                  }
-                };
-              };
-            })
-            .catch(err => console.log('SW registration failed: ', err));
-        });
-      }
-    </script>
   </body>
 </html>
