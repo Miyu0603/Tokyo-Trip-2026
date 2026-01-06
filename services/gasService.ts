@@ -1,5 +1,6 @@
 
 import { CostItem } from '../types';
+import { formatDate } from '../utils/helpers';
 
 /**
  * 儲存消費紀錄到 Google Sheets
@@ -41,7 +42,7 @@ export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' |
 
   const payload = {
     action,
-    date: item.date.replace(/-/g, '/'),
+    date: item.date, // 已經是 YYYY/MM/DD
     item: item.description,
     payer: item.payer === 'Anbao' ? '安寶' : '婷寶',
     amountTwd,
@@ -88,7 +89,8 @@ export const fetchCostsFromGAS = async (url: string): Promise<CostItem[] | null>
 
             return {
                 id: String(row.rowIndex),
-                date: String(row.date || "").replace(/'/g, "").replace(/-/g, '/'),
+                // 使用 formatDate 徹底清除 ISO 時間殘留
+                date: formatDate(String(row.date || "").replace(/'/g, "")),
                 description: String(row.item || ""),
                 payer: (row.payer === '婷寶' || row.payer === 'Tingbao') ? 'Tingbao' : 'Anbao',
                 amount: total,

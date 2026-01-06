@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export const Icon = ({ name, className = "w-6 h-6" }: { name: string; className?: string }) => {
@@ -37,13 +38,13 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] animate-in fade-in duration-200" onClick={onClose}></div>
-        <div className="relative w-full max-w-full sm:max-w-md bg-white border-t-[10px] border-tokyo-ink p-8 shadow-2xl transform transition-all animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto no-scrollbar rect-ui">
-            <div className="flex justify-between items-center mb-8">
-                <h3 className="text-2xl font-serif font-bold text-tokyo-ink tracking-widest">{title}</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-[3px] animate-in fade-in duration-200" onClick={onClose}></div>
+        <div className="relative w-full max-w-md bg-white border-t-[8px] border-tokyo-ink p-6 shadow-2xl transform transition-all animate-in zoom-in-95 duration-300 max-h-[95vh] overflow-y-auto no-scrollbar rect-ui">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-serif font-bold text-tokyo-ink tracking-widest">{title}</h3>
                 <button onClick={onClose} className="p-2 -mr-2 text-gray-400 hover:text-tokyo-red transition active:scale-90">
-                    <Icon name="close" className="w-7 h-7" />
+                    <Icon name="close" className="w-6 h-6" />
                 </button>
             </div>
             <div className="relative">
